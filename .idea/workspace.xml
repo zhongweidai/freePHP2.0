@@ -1,0 +1,774 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="d16ab9f8-c914-49b6-8fc1-8bf6da46f3c8" name="Default" comment="" />
+    <ignored path="freePHP.iws" />
+    <ignored path=".idea/workspace.xml" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="DaemonCodeAnalyzer">
+    <disable_hints />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FavoritesManager">
+    <favorites_list name="freePHP" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file leaf-file-name="Free.php" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/free/Free.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="10" column="1" selection-start="128" selection-end="128" vertical-scroll-proportion="42.07143" vertical-offset="1368" max-vertical-offset="5719">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ServiceBase.php" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Web/Service/ServiceBase.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="2" column="23" selection-start="33" selection-end="33" vertical-scroll-proportion="-1.3571428" vertical-offset="0" max-vertical-offset="456">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="WebDataExtension.php" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Web/Tags/Twig/WebDataExtension.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="32" column="27" selection-start="851" selection-end="851" vertical-scroll-proportion="-9.035714" vertical-offset="260" max-vertical-offset="1140">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FreeTwigTemplate.php" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/free/Component/Template/FreeTwigTemplate.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="59" column="13" selection-start="1669" selection-end="1669" vertical-scroll-proportion="-21.464285" vertical-offset="425" max-vertical-offset="1330">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="UserDataTag.php" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Web/Tags/UserDataTag.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="7" column="0" selection-start="83" selection-end="83" vertical-scroll-proportion="-1.3571428" vertical-offset="0" max-vertical-offset="361">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="UserService.php" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/Web/Service/User/UserService.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="15" column="2" selection-start="187" selection-end="187" vertical-scroll-proportion="0.35514018" vertical-offset="0" max-vertical-offset="535">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.php" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/index.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="7" column="24" selection-start="226" selection-end="226" vertical-scroll-proportion="-4.75" vertical-offset="0" max-vertical-offset="304">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="application.php" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/configs/application.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="7" column="10" selection-start="225" selection-end="225" vertical-scroll-proportion="-4.75" vertical-offset="0" max-vertical-offset="437">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index_init.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Web/templates/Index/index_init.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="13" column="27" selection-start="246" selection-end="246" vertical-scroll-proportion="-8.821428" vertical-offset="0" max-vertical-offset="399">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindManager">
+    <FindUsagesManager>
+      <setting name="OPEN_NEW_TAB" value="false" />
+    </FindUsagesManager>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="changedFiles">
+      <list>
+        <option value="$PROJECT_DIR$/free/Component/Http/IFreeResponse.php" />
+        <option value="$PROJECT_DIR$/free/Component/Route/FreeDefaultRoute.php" />
+        <option value="$PROJECT_DIR$/free/Component/log/FreeLogContainer.php" />
+        <option value="$PROJECT_DIR$/free/Component/Log/FreeDebug.php" />
+        <option value="$PROJECT_DIR$/free/Component/Log/FreeLogger.php" />
+        <option value="$PROJECT_DIR$/free/Component/Session/AbstractFreeSession.php" />
+        <option value="$PROJECT_DIR$/free/Component/Session/FreeMemcacheSession.php" />
+        <option value="$PROJECT_DIR$/free/Component/cache/AbstractFreeCache.php" />
+        <option value="$PROJECT_DIR$/free/Component/Cache/AbstractFreeCache.php" />
+        <option value="$PROJECT_DIR$/free/Component/Cache/FreeMemCache.php" />
+        <option value="$PROJECT_DIR$/configs/cache.php" />
+        <option value="$PROJECT_DIR$/free/Component/Cache/FreeRedisCache.php" />
+        <option value="$PROJECT_DIR$/free/Component/Cache/FreeXmlCache.php" />
+        <option value="$PROJECT_DIR$/free/utility/FreeArray.php" />
+        <option value="$PROJECT_DIR$/free/Utility/FreeArray.php" />
+        <option value="$PROJECT_DIR$/free/Utility/FreeConnect.php" />
+        <option value="$PROJECT_DIR$/free/Component/convert/FreeGeneralConverter.php" />
+        <option value="$PROJECT_DIR$/free/Component/Convert/FreeGeneralConverter.php" />
+        <option value="$PROJECT_DIR$/free/Component/Convert/IFreeConverter.php" />
+        <option value="$PROJECT_DIR$/free/Utility/FreeConvert.php" />
+        <option value="$PROJECT_DIR$/free/Utility/FreeDate.php" />
+        <option value="$PROJECT_DIR$/free/Utility/FreeFile.php" />
+        <option value="$PROJECT_DIR$/free/Utility/FreeFolder.php" />
+        <option value="$PROJECT_DIR$/free/Utility/FreeImage.php" />
+        <option value="$PROJECT_DIR$/free/Utility/FreePack.php" />
+        <option value="$PROJECT_DIR$/free/Utility/FreeSecurity.php" />
+        <option value="$PROJECT_DIR$/free/Utility/FreeSession.php" />
+        <option value="$PROJECT_DIR$/free/Utility/FreeString.php" />
+        <option value="$PROJECT_DIR$/free/Utility/FreeValidator.php" />
+        <option value="$PROJECT_DIR$/free/Utility/IFreeConverter.php" />
+        <option value="$PROJECT_DIR$/free_old/libs/upload/FreeFormUpload.php" />
+        <option value="$PROJECT_DIR$/free/Component/Cache/FreeTtCache.php" />
+        <option value="$PROJECT_DIR$/caches/~runtime.php" />
+        <option value="$PROJECT_DIR$/free/Component/Session/FreeFileSession.php" />
+        <option value="$PROJECT_DIR$/index.php" />
+        <option value="$PROJECT_DIR$/free/Component/Cache/FreeFileCache.php" />
+        <option value="$PROJECT_DIR$/free/_compile.php" />
+        <option value="$PROJECT_DIR$/src/Web/Tags/Twig/WebHtmlExtension.php" />
+        <option value="$PROJECT_DIR$/configs/system.php" />
+        <option value="$PROJECT_DIR$/free/Component/Http/FreeHttpResponse.php" />
+        <option value="$PROJECT_DIR$/free/Component/Template/FreeTwigTemplate.php" />
+        <option value="$PROJECT_DIR$/free/Free.php" />
+        <option value="$PROJECT_DIR$/free/Libs/FreeApplication.php" />
+        <option value="$PROJECT_DIR$/free/Libs/FreeController.php" />
+        <option value="$PROJECT_DIR$/src/Web/Controller/Index/IndexController.php" />
+        <option value="$PROJECT_DIR$/src/Web/Service/ServiceBase.php" />
+        <option value="$PROJECT_DIR$/configs/application.php" />
+        <option value="$PROJECT_DIR$/src/Web/Tags/Twig/WebDataExtension.php" />
+        <option value="$PROJECT_DIR$/src/Web/templates/Index/index_init.html" />
+        <option value="$PROJECT_DIR$/src/Web/Tags/UserDataTag.php" />
+        <option value="$PROJECT_DIR$/src/Web/Service/User/UserService.php" />
+      </list>
+    </option>
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="-8" />
+    <option name="width" value="1378" />
+    <option name="height" value="744" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
+    <OptionsSetting value="true" id="Add" />
+    <OptionsSetting value="true" id="Remove" />
+    <OptionsSetting value="true" id="Checkout" />
+    <OptionsSetting value="true" id="Update" />
+    <OptionsSetting value="true" id="Status" />
+    <OptionsSetting value="true" id="Edit" />
+    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="0" id="Remove" />
+  </component>
+  <component name="ProjectReloadState">
+    <option name="STATE" value="0" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1" splitterProportion="0.5">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="freePHP" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="freePHP" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="freePHP" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="freePHP" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="freePHP" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Web" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="freePHP" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="freePHP" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Web" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Service" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="freePHP" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="freePHP" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Web" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Service" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="User" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="freePHP" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="freePHP" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="free" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="freePHP" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="freePHP" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="free" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Component" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Template" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="freePHP" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="freePHP" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="free" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Component" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="freePHP" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="freePHP" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="configs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="freePHP" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="freePHP" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="caches" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="options.lastSelected" value="web-ide.project.structure" />
+    <property name="options.splitter.main.proportions" value="0.3" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="SearchEverywhereHistory" value="" />
+    <property name="FullScreen" value="false" />
+    <property name="DefaultHtmlFileTemplate" value="Html5" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="I:\htdocs\freePHP\free\Component\Http" />
+      <recent name="I:\htdocs\freePHP\src\Web\Tags\Twig" />
+      <recent name="I:\htdocs\freePHP\free\Component" />
+      <recent name="I:\htdocs\freePHP\free\Component\Db" />
+      <recent name="I:\htdocs\freePHP\configs" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="I:\htdocs\freePHP\free\Component" />
+      <recent name="I:\htdocs\freePHP\free" />
+      <recent name="I:\htdocs\freePHP\free\Component\Template" />
+      <recent name="I:\htdocs\freePHP\src\Web\Controller\Index" />
+      <recent name="I:\htdocs\freePHP\free\Component\Model" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
+      <TestRunner />
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpLocalRunConfigurationType" factoryName="PHP Console">
+      <method />
+    </configuration>
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug" singleton="true">
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpUnitRemoteRunConfigurationType" factoryName="PHPUnit on Server">
+      <method />
+    </configuration>
+    <list size="0" />
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="SvnConfiguration" maxAnnotateRevisions="500" myUseAcceleration="nothing" myAutoUpdateAfterCommit="false" cleanupOnStartRun="false" SSL_PROTOCOLS="all">
+    <option name="USER" value="" />
+    <option name="PASSWORD" value="" />
+    <option name="mySSHConnectionTimeout" value="30000" />
+    <option name="mySSHReadTimeout" value="30000" />
+    <option name="LAST_MERGED_REVISION" />
+    <option name="MERGE_DRY_RUN" value="false" />
+    <option name="MERGE_DIFF_USE_ANCESTRY" value="true" />
+    <option name="UPDATE_LOCK_ON_DEMAND" value="false" />
+    <option name="IGNORE_SPACES_IN_MERGE" value="false" />
+    <option name="CHECK_NESTED_FOR_QUICK_MERGE" value="false" />
+    <option name="IGNORE_SPACES_IN_ANNOTATE" value="true" />
+    <option name="SHOW_MERGE_SOURCES_IN_ANNOTATE" value="true" />
+    <option name="FORCE_UPDATE" value="false" />
+    <option name="IGNORE_EXTERNALS" value="false" />
+    <myIsUseDefaultProxy>false</myIsUseDefaultProxy>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d16ab9f8-c914-49b6-8fc1-8bf6da46f3c8" name="Default" comment="" />
+      <created>1409211421826</created>
+      <updated>1409211421826</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-8" y="0" width="1378" height="744" extended-state="0" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32954547" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27651516" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.17810458" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
+      <collection />
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="myTodoPanelSettings">
+      <TodoPanelSettings />
+    </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <option name="time" value="4" />
+    </breakpoint-manager>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/configs/cache.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="18" selection-start="320" selection-end="320" vertical-scroll-proportion="-3.392857" vertical-offset="171" max-vertical-offset="722" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/free/Component/Cache/FreeRedisCache.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="101" column="25" selection-start="2423" selection-end="2423" vertical-scroll-proportion="-6.214286" vertical-offset="1745" max-vertical-offset="5073" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/free/Component/Cache/FreeXmlCache.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="26" selection-start="32" selection-end="32" vertical-scroll-proportion="0.036398467" vertical-offset="0" max-vertical-offset="3135" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/free/Component/Convert/IFreeConverter.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="28" selection-start="34" selection-end="34" vertical-scroll-proportion="0.03411131" vertical-offset="0" max-vertical-offset="557" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/free/Utility/FreeArray.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="158" column="8" selection-start="3904" selection-end="3904" vertical-scroll-proportion="-0.7504488" vertical-offset="3420" max-vertical-offset="4408" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/free/Utility/FreeConnect.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="130" column="9" selection-start="4300" selection-end="4300" vertical-scroll-proportion="-0.3272059" vertical-offset="2648" max-vertical-offset="3192" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/free/Utility/FreeConvert.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="0" selection-start="6" selection-end="24" vertical-scroll-proportion="-0.6785714" vertical-offset="0" max-vertical-offset="3781" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/free/Utility/FreeFile.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="167" column="34" selection-start="3742" selection-end="3742" vertical-scroll-proportion="43.42857" vertical-offset="4389" max-vertical-offset="5833" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/free/Utility/FreeFolder.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="18" selection-start="24" selection-end="24" vertical-scroll-proportion="-0.6785714" vertical-offset="0" max-vertical-offset="2641" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/free/Utility/FreeImage.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="27" selection-start="164" selection-end="164" vertical-scroll-proportion="17.642857" vertical-offset="741" max-vertical-offset="6156" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/free/Utility/FreePack.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="16" selection-start="62" selection-end="62" vertical-scroll-proportion="-4.071429" vertical-offset="0" max-vertical-offset="5586" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/free/Utility/FreeSecurity.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="18" selection-start="24" selection-end="24" vertical-scroll-proportion="105.17857" vertical-offset="2964" max-vertical-offset="6194" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/free/Utility/FreeSession.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="10" selection-start="56" selection-end="56" vertical-scroll-proportion="51.57143" vertical-offset="1539" max-vertical-offset="2318" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/free/Utility/FreeString.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="18" selection-start="24" selection-end="24" vertical-scroll-proportion="23.75" vertical-offset="684" max-vertical-offset="7733" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/free/Utility/IFreeConverter.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="18" selection-start="24" selection-end="24" vertical-scroll-proportion="0.03411131" vertical-offset="0" max-vertical-offset="557" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/free/Utility/FreeValidator.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="18" selection-start="24" selection-end="24" vertical-scroll-proportion="-0.27941176" vertical-offset="171" max-vertical-offset="7961" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/free_old/libs/upload/FreeFormUpload.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="0" selection-start="6" selection-end="6" vertical-scroll-proportion="0.03411131" vertical-offset="0" max-vertical-offset="988" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/free/Utility/FreeDate.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="17" selection-start="16" selection-end="23" vertical-scroll-proportion="0.03492647" vertical-offset="0" max-vertical-offset="6897" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/free/Component/Convert/FreeGeneralConverter.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="26" selection-start="83" selection-end="83" vertical-scroll-proportion="0.20955883" vertical-offset="0" max-vertical-offset="6270" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/free/Component/Cache/FreeTtCache.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="39" column="28" selection-start="1143" selection-end="1143" vertical-scroll-proportion="-0.54578096" vertical-offset="1045" max-vertical-offset="3591" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/free/Component/Filter/FreeDefaultFilter.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="741" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/free/Libs/FreeException.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="16" selection-start="472" selection-end="472" vertical-scroll-proportion="-0.06985294" vertical-offset="399" max-vertical-offset="1596" />
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/com/jetbrains/php/lang/psi/stubs/data/tokenizer.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="140" column="8" selection-start="3965" selection-end="3965" vertical-scroll-proportion="-0.10338346" vertical-offset="2715" max-vertical-offset="3344" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/free_old/libs/view/FreeTemplate.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="63" column="47" selection-start="1727" selection-end="1729" vertical-scroll-proportion="-4.071429" vertical-offset="1083" max-vertical-offset="7372" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/free_old/free.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="31" column="13" selection-start="694" selection-end="694" vertical-scroll-proportion="0.5808824" vertical-offset="273" max-vertical-offset="10336">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/free/Component/Cache/AbstractFreeCache.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="9" selection-start="6" selection-end="15" vertical-scroll-proportion="-0.6785714" vertical-offset="0" max-vertical-offset="931" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/free/Component/Cache/FreeFileCache.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="118" column="13" selection-start="3316" selection-end="3316" vertical-scroll-proportion="-16.535715" vertical-offset="1779" max-vertical-offset="3458" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/free/Component/Session/FreeFileSession.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="24" selection-start="361" selection-end="361" vertical-scroll-proportion="0.49719626" vertical-offset="0" max-vertical-offset="535" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/free/_compile.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="22" selection-start="96" selection-end="109" vertical-scroll-proportion="0.14205608" vertical-offset="114" max-vertical-offset="2698" />
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/com/jetbrains/php/lang/psi/stubs/data/Core_c.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="194" column="20" selection-start="5274" selection-end="5274" vertical-scroll-proportion="0.3505747" vertical-offset="3503" max-vertical-offset="6612" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/free_old/base/FreeInit.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="39" column="50" selection-start="1210" selection-end="1252" vertical-scroll-proportion="0.72796935" vertical-offset="361" max-vertical-offset="1900">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/free/Component/Http/FreeHttpResponse.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="612" column="68" selection-start="13068" selection-end="13068" vertical-scroll-proportion="-13.142858" vertical-offset="11260" max-vertical-offset="15390" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Web/Tags/Twig/WebHtmlExtension.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="26" column="21" selection-start="425" selection-end="425" vertical-scroll-proportion="0.7777778" vertical-offset="0" max-vertical-offset="1159" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/configs/system.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="20" column="12" selection-start="380" selection-end="387" vertical-scroll-proportion="-10.178572" vertical-offset="0" max-vertical-offset="475" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/caches/templates/compilation_cache/9d/dc/b015271df997ec46ca42c325aa7a53d15fb0774a14de73ff24a07c1c6b53.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="18" column="29" selection-start="450" selection-end="450" vertical-scroll-proportion="0.6576923" vertical-offset="0" max-vertical-offset="1349" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/caches/~runtime.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="83" column="50" selection-start="53336" selection-end="53337" vertical-scroll-proportion="3.0326922" vertical-offset="0" max-vertical-offset="1729" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/free/Libs/FreeController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="18" selection-start="142" selection-end="142" vertical-scroll-proportion="0.0" vertical-offset="114" max-vertical-offset="2489" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/free/Component/Model/AbstractFreeModel.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="15" selection-start="187" selection-end="187" vertical-scroll-proportion="-10.024904" vertical-offset="5423" max-vertical-offset="7999">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Web/Controller/Index/IndexController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="23" column="35" selection-start="558" selection-end="558" vertical-scroll-proportion="0.6093458" vertical-offset="111" max-vertical-offset="646">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Web/Model/UserModel.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="34" selection-start="165" selection-end="174" vertical-scroll-proportion="0.44344702" vertical-offset="0" max-vertical-offset="557">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/free/Libs/FreeApplication.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="52" column="36" selection-start="1144" selection-end="1144" vertical-scroll-proportion="1.8161764" vertical-offset="0" max-vertical-offset="3553">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/free/Component/Model/FreeModel.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="16" column="49" selection-start="507" selection-end="507" vertical-scroll-proportion="0.4731801" vertical-offset="57" max-vertical-offset="4446">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/free/Free.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="1" selection-start="128" selection-end="128" vertical-scroll-proportion="42.07143" vertical-offset="1368" max-vertical-offset="5719">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="24" selection-start="226" selection-end="226" vertical-scroll-proportion="-4.75" vertical-offset="0" max-vertical-offset="304">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Web/Service/ServiceBase.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="23" selection-start="33" selection-end="33" vertical-scroll-proportion="-1.3571428" vertical-offset="0" max-vertical-offset="456">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/free/Component/Template/FreeTwigTemplate.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="59" column="13" selection-start="1669" selection-end="1669" vertical-scroll-proportion="-21.464285" vertical-offset="425" max-vertical-offset="1330">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/configs/application.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="10" selection-start="225" selection-end="225" vertical-scroll-proportion="-4.75" vertical-offset="0" max-vertical-offset="437">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Web/Tags/Twig/WebDataExtension.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="32" column="27" selection-start="851" selection-end="851" vertical-scroll-proportion="-9.035714" vertical-offset="260" max-vertical-offset="1140">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Web/templates/Index/index_init.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="27" selection-start="246" selection-end="246" vertical-scroll-proportion="-8.821428" vertical-offset="0" max-vertical-offset="399">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Web/Tags/UserDataTag.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="0" selection-start="83" selection-end="83" vertical-scroll-proportion="-1.3571428" vertical-offset="0" max-vertical-offset="361">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Web/Service/User/UserService.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="15" column="2" selection-start="187" selection-end="187" vertical-scroll-proportion="0.35514018" vertical-offset="0" max-vertical-offset="535">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
+
