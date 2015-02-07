@@ -1,0 +1,82 @@
+<style type="text/css">
+#box { background: #FFF; width: 238px; height: 410px; margin: -390px 0 0 0; display: block; border: solid 4px #D93600; position: absolute; z-index: 999; opacity: .5}
+.shopMenu { position: fixed; z-index:1; right:25%; top: 0;}
+
+</style>
+<div class="squares" nc_type="current_display_mode">
+  {% if goods_list %}
+  <ul class="list_pic">
+  	{% for value in goods_list %}
+    <li class="item">
+      <div class="goods-content" nctype_goods="{{value.goods_id}}" nctype_store="{{value.store_id}}">
+        <div class="goods-pic"><a href="{{path('goods/index/init',{goods_id:value.goods_id})}}" target="_blank" title="{{value.goods_name}}"><img src="{{thumb(value, 240)}}" title="{{value.goods_name}}" alt="{{value.goods_name}}" /></a> </div>
+        {% if value.group_flag %}
+        <div class="goods-promotion"><span>团购商品</span></div>
+        {% elseif value.xianshi_flag %}
+        <div class="goods-promotion"><span>限时折扣</span></div>
+        {% endif %}
+        <div class="goods-info">
+          <div class="goods-pic-scroll-show">
+          	{% if value.image %}
+            <ul>
+              {% set i = 0 %}
+              {% for val in value.image %}
+              {% set i = i + 1 %}
+              <li{%if i==1 %} class="selected"{%endif%}><a href="javascript:void(0);"><img src="{{thumb(val, 60)}}"/></a></li>
+              {%endfor%}
+            </ul>
+            {%endif%}
+          </div>
+          <div class="goods-name">
+          	<a href="{{path('goods/index/init',{goods_id:value.goods_id})}}" target="_blank" title="{{value.goods_jingle}}">{{value.goods_name}}<em>{{value.goods_jingle}}</em></a>
+          </div>
+
+          <div class="goods-price">
+          <em class="sale-price" title="{{lang('goods:class_index_store_price')}} {{lang('common:nc_colon')|raw}} {{lang('common:currency')|raw}} {{value.goods_price}}">{{value.goods_price|ncPriceFormatForList|raw}}</em>
+          <em class="market-price" title="市场价：{{lang('common:currency')|raw}} {{value.goods_marketprice}}">{{value.goods_marketprice|ncPriceFormatForList|raw}}</em>
+          <span class="raty" data-score="{{value.evaluation_good_star}}"></span>
+      </div>
+          <div class="sell-stat">
+            <ul>
+              <li><a href="{{path('goods/index/init', {goods_id: value.goods_id})}}#ncGoodsRate" target="_blank" class="status">{{value.goods_salenum}}</a><p>商品销量</p></li>
+              <li><a href="{{path('goods/index/init', {goods_id: value.goods_id})}}" target="_blank">{{value.evaluation_count}}</a><p>用户评论</p></li>
+              <li><em member_id="{{value.member_id}}">&nbsp;</em></li>
+            </ul>
+          </div>
+          <div class="store"><a href="{{path('show/store/index',{store_id:value.store_id}, '',value.store_domain)}}" title="{{value.store_name}}" class="name">{{value.store_name}}</a></div>
+         <div class="add-cart">
+          {%if value.group_flag %}
+           <a href="javascript:void(0);" nctype="buy_now" data-param="{goods_id:{{ value.goods_id}} }"><i class="icon-shopping-cart"></i>立即购买</a>
+          {%else%}
+           <a href="javascript:void(0);" nctype="add_cart" data-param="{goods_id:{{ value.goods_id}} }"><i class="icon-shopping-cart"></i>加入购物车</a>
+          {%endif%}
+         </div>
+        </div>
+      </div>
+    </li>
+   {%endfor%}
+    <div class="clear"></div>
+  </ul>
+  {%else%}
+  <div id="no_results" class="no-results"><i></i>{{lang('index_no_record')}}</div>
+  {%endif%}
+</div>
+<form id="buynow_form" method="post" action="{{path()}}" target="_blank">
+  <input id="act" name="act" type="hidden" value="buy" />
+  <input id="op" name="op" type="hidden" value="buy_step1" />
+  <input id="goods_id" name="cart_id[]" type="hidden"/>
+</form>
+<script type="text/javascript" src="{{assets('data/resource/js/jquery.raty/jquery.raty.min.js')}}"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".raty").raty({
+            path: "{{assets('data/resource/js/jquery.raty/img')}}",
+            readOnly: true,
+            width: 80,
+            score: function() {
+              return $(this).attr("data-score");
+            }
+        });
+    });
+</script>
+

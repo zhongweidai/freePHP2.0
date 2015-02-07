@@ -1,0 +1,21 @@
+
+<div class="title">
+<h3>推广商品</h3></div>
+<div class="content" nc_type="current_display_mode">
+  {% if goods_list %}
+  <ul class="nch-booth-list squares">
+    {% for value in goods_list }}
+    <li nctype_goods="{{value.goods_id}}" nctype_store="{{value.store_id}}">
+        <div class="goods-pic"><a href="{{path('goods/index',{goods_id:value.goods_id})}}" target="_blank" title="{{value.goods_name}}"><img src="{{thumb(value, 240)}}" title="{{value.goods_name}}" alt="{{value.goods_name}}" /></a> </div>
+        {%if value.group_flag%}
+        <div class="goods-promotion"><span>团购商品</span></div>
+        {% elseif value.xianshi_flag %}
+        <div class="goods-promotion"><span>限时折扣</span></div>
+        {%endif%}
+          <div class="goods-name"><a href="{{path('goods/index',{goods_id:value.goods_id})}}" target="_blank" title="{{value.goods_jingle}}">{{value.goods_name}}</a></div>
+          <div class="goods-price" title="商品价格{{lang('common:nc_colon')}}{{lang('common:currency'){{value.goods_price}}">{{lang('common.currency')}}{{value.goods_price}}</div>
+    </li>
+    {%endfor%}
+  </ul>
+  {%endif%}
+</div>

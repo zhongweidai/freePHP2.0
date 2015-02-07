@@ -1,0 +1,257 @@
+{% extends 'layout-webfront.html' %}
+{% block content %}
+<script src="{{assets('resource/js/search_goods.js')}}"></script>
+<script src="{{assets('data/resource/js/class_area_array.js')}}"></script>
+<link href="{{assets('style/default/css/layout.css')}}" rel="stylesheet" type="text/css">
+<style type="text/css">
+body {
+_behavior: url({{assets('style/default/css/csshover.htc')}});
+}
+</style>
+<div class="nch-container wrapper" >
+  <div class="left">
+    {% if goods_class_array %}
+    <div class="nch-module nch-module-style02">
+      <div class="title">
+        <h3>分类筛选</h3>
+      </div>
+      <div class="content">
+        <ul id="files" class="tree">
+          {% for value in goods_class_array %}
+          <li><i class="tree-parent tree-parent-collapsed"></i>
+          <a href="{{path('search/index/init',{cate_id:value.gc_id})}}" {% if value.gc_id == get.cate_id %} class="selected" {%endif%}>{{value.gc_name}}</a>
+            {% if value.class2 %}
+            <ul>
+              {%for val in value.class2 %}
+              <li><i class="tree-parent tree-parent-collapsed"></i>
+              <a href="{{path('search/index/init',{cate_id:val.gc_id})}}" {% if val.gc_id == get.cate_id %} class="selected" {%endif%}>{{val.gc_name}}</a>
+                {%if val.class3 %}
+                <ul>
+                  {% for v in val.class3 %}
+                  <li class="tree-parent tree-parent-collapsed"><i></i><a href="{{path('search/index/init',{cate_id:v.gc_id})}}" {% if v.gc_id == get.cate_id %} class="selected" {%endif%}>{{v.gc_name}}</a></li>
+                  {%endfor%}
+                </ul>
+                {%endif%}
+              </li>
+              {%endfor%}
+            </ul>
+            {%endif%}
+          </li>
+          {%endfor%}
+        </ul>
+      </div>
+    </div>
+    {%endif%}
+    <!-- S 推荐展位 -->
+    <div nctype="booth_goods" class="nch-module" style="display:none;"> </div>
+    <!-- E 推荐展位 -->
+    <div class="nch-module-sidebar"> {{data('Adv',{ap_id:37,type:'html'})}}
+      <div class="clear"></div>
+    </div>
+    <div class="nch-module nch-module-style03">
+      <div class="title">
+        <h3>{{lang('goods:class_viewed_goods')}}</h3>
+      </div>
+      <div class="content">
+        {% for v in viewed_goods %}
+        <dl class="nch-sidebar-bowers">
+          <dt class="goods-name"><a href="{{path('goods/index/init',{goods_id:v.goods_id})}}">{{v.goods_name}}</a></dt>
+          <dd class="goods-pic"><a href="{{path('goods/index/init',{goods_id:v.goods_id})}}"><img src="{{thumb(v, 60)}}" title="{{v.goods_name}}" alt="{{v.goods_name}}" ></a></dd>
+          <dd class="goods-price">{{lang('common:currency')}}{{v.goods_price}}</dd>
+        </dl>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  <div class="right">
+  	{% if goods_class_array.child %}
+    {% set dl=1 %}
+    	{% if brand_array or  attr_array%}
+    <div class="nch-module nch-module-style01">
+      <div class="title">
+        <h3>
+          {% if class_name %}
+          <em>{{class_name}}</em> -
+          {% endif %}
+          商品筛选</h3>
+      </div>
+      <div class="content">
+        <div class="nch-module-filter">
+          {% if checked_brand or checked_attr %}
+          <dl nc_type="ul_filter">
+            <dt>{{ lang('goods:class_index_selected')}}{{lang('common:nc_colon')}}</dt>
+            <dd class="list">
+              {% if checked_brand %}
+              {% for val in checked_brand %}
+              <span class="selected" nctype="span_filter">{{lang('goods:class_index_brand')}}:<em>{{val.brand_name}}</em><i data-uri="{{path('',{b_id:key})}}">X</i></span>
+              {% endfor %}
+              {% endif %}
+              {% if check_attr %}
+              {% for val in checked_attr %}
+              <span class="selected" nctype="span_filter">{{val.attr_name}}<em>{{val.attr_value_name}}</em><i data-uri="{{path('',{b_id:key})}}">X</i></span>
+              {% endfor %}
+              {% endif %}
+            </dd>
+          </dl>
+          {% endif %}
+          {% if checked_brand %}
+          	{% if brand_array %}
+          <dl {% if dl>3 %}class="dl_hide"{% endif %}>
+            <dt>{{lang('goods:class_index_brand')}}{{lang('common:nc_colon')}}</dt>
+            <dd class="list">
+              <ul>
+              	{% set i =0 %}
+              	{% for v in brand_array %}
+              	{% set i = i + 1 %}
+              	{% set b_id =  app.request.get.b_id ? app.request.get.b_id + '_' + loop.index : loop.index %}
+                <li {% if i>10 %}style="display:none" nc_type="none" {% endif %}><a href="{{path('',{b_id:b_id})}}">{{v.brand_name}}</a></li>
+                {% endfor %}
+              </ul>
+            </dd>
+            {% if brand_array|length %}
+            <dd class="all"><span nc_type="show"><i class="icon-angle-down"></i><?php echo lang['goods:class_index_more'];?></span></dd>
+            {% endif %}
+          </dl>
+          {% set dl = dl + 1 %}
+           {% endif %}
+            {% endif %}
+
+		 {% if cate_array %}
+          <dl {% if dl>3 %}class="dl_hide"{% endif %}>
+            <dt>{{ lang('goods:class_index_goods_class')}}{{lang('nc_colon')}}</dt>
+            <dd class="list">
+              <ul>
+              	{% set i=0 %}
+              	{% for v in cate_array %}
+              	{% set i = i+1 %}
+              	{% set b_id =  app.request.get.b_id ? app.request.get.b_id + '_' + loop.index : loop.index %}
+                
+                <li {% if i>10 %} style="display:none" nc_type="none"{%endif%}><a href="{{path('',{b_id:b_id})}}">{{v.gc_name}}</a></li>
+                 {% endfor %}
+              </ul>
+            </dd>
+            {% if brand_array|length > 10%}
+            <dd class="all"><span nc_type="show"><i class="icon-angle-down"></i>{{lang('goods:class_index_more')}}</span></dd>
+            {%endif%}
+          </dl>
+             {% set dl=dl+1%}
+         {%endif%}
+
+		 {% if attr_array %}
+			{% set j=0 %}
+			{%for val in attr_array %}
+			{%set j =j+1%}
+			{%if checked.loop.index and val.value %}
+          <dl>
+            <dt>{{val.name}}{{lang('nc_colon')}}</dt>
+            <dd class="list">
+              <ul>
+			 {% set i=0 %}
+			{%for v in val.value %}
+			{% set i =i+1%}
+			{% set a_id =  app.request.getGet('a_id') ? app.request.getGet('a_id')+'_' + loop.index : loop.index %}
+                
+                <li {%if i>10%}style="display:none" nc_type="none"{%endif%}><a href="#">{{v.attr_value_name}}</a></li>
+                {%endfor%}
+              </ul>
+            </dd>
+            {% if val.value|length > 10%}
+            <dd class="all"><span nc_type="show"><i class="icon-angle-down"></i>{{lang('goods:class_index_more')}}</span></dd>
+             {%endif%}
+          </dl>
+          {%endif%}
+          {% set dl=dl+1%}
+          {%endfor%}    
+ 		{%endif%}
+        </div>
+      </div>
+    </div>
+    {%endif%}
+    {%endif%}
+    <div class="shop_con_list" id="main-nav-holder">
+      <nav class="sort-bar" id="main-nav">
+      <div class="pagination">{{show_page1}} </div>
+      <div class="nch-all-category">
+        <div class="all-category">
+        {{freeRender('index/index/categoryTree')}}
+         {#{%include 'goods/home_goods_class.html'%}#}
+        </div>
+      </div>
+     	<div class="nch-sortbar-array"> 排序方式：
+          <ul>
+            <li {%if app.request.getGet('key')%}class="selected"{%endif%}><a href={{dropParam(['order','key'])}}  title="{{lang('goods:class_index_default_sort')}}">{{lang('goods:class_index_default_sort')}}</a></li>
+            <li {%if app.request.getGet('key')== '1'%}class="selected"{%endif%}><a href="{% if app.request.getGet('order')=='2' and app.request.getGet('key')=='1'%}{{replaceParam({key:'1',order:'1'})}}{%else%}{{replaceParam({key:'1',order:'2'})}}{%endif%}" {%if app.request.getGet('key') == '1' %}class="{%if app.request.getGet('order')==1%}asc{%else%}desc{%endif%}"{%endif%} title="{%if app.request.getGet('order')=='2' and app.request.getGet('key')=='1'%}{{lang('goods:class_index_sold_asc')}}{{lang('goods:class_index_sold_desc')}}{%endif%}">{{lang('goods:class_index_sold')}}<i></i></a></li>
+            <li {%if app.request.getGet('key')== '2'%}class="selected"{%endif%}><a href="{% if app.request.getGet('order')=='2' and app.request.getGet('key')=='2'%}{{replaceParam({key:'2',order:'1'})}}{%else%}{{replaceParam({key:'2',order:'2'})}}{%endif%}" {%if app.request.getGet('key') == '2' %}class="{%if app.request.getGet('order')==1%}asc{%else%}desc{%endif%}"{%endif%} title="{%if app.request.getGet('order')=='2' and app.request.getGet('key')=='2'%}{{lang('goods:class_index_click_asc')}}{{lang('goods:class_index_click_desc')}}{%endif%}">{{lang('goods:class_index_click')}}<i></i></a></li>
+            <li {%if app.request.getGet('key')== '3'%}class="selected"{%endif%}><a href="{% if app.request.getGet('order')=='2' and app.request.getGet('key')=='3'%}{{replaceParam({key:'1',order:'1'})}}{%else%}{{replaceParam({key:'3',order:'2'})}}{%endif%}" {%if app.request.getGet('key') == '3' %}class="{%if app.request.getGet('order')==1%}asc{%else%}desc{%endif%}"{%endif%} title="{%if app.request.getGet('order')=='2' and app.request.getGet('key')=='3'%}{{lang('goods:class_index_price_asc')}}{{lang('goods:class_index_price_desc')}}{%endif%}">{{lang('goods:class_index_price')}}<i></i></a></li>
+            
+           </ul>
+        </div>
+        <div class="nch-sortbar-owner">商品类型：<span><a href="#"><i></i>全部</a></span> 
+        	<span><a href="#" {% if app.request.getGet('type') == 1 %}class="selected"{%endif%}><i></i>商城自营</a></span>
+         	<span><a href="#" {% if app.request.getGet('type') == 2 %}class="selected"{%endif%}><i></i>商家加盟</a></span> 
+         </div>
+        <div class="nch-sortbar-location">商品所在地：
+          <div class="select-layer">
+            <div class="holder"><em nc_type="area_name">{{lang('goods:class_index_area')}}<!-- ���ڵ� --></em></div>
+            <div class="selected"><a nc_type="area_name">{{lang('goods:class_index_area')}}<!-- ���ڵ� --></a></div>
+            <i class="direction"></i>
+            <ul class="options">
+              
+            </ul>
+          </div>
+        </div>
+
+      </nav>
+      <!-- 商品列表循环  -->
+
+      <div>
+      	{% include 'goods/goods_squares.html' %}
+      </div>
+      <div class="tc mt20 mb20">
+        <div class="pagination">{{show_page}} </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="{{assets('/data/resource/js/waypoints.js')}}"></script>
+<script src="{{assets('/resource/js/search_category_menu.js')}}"></script>
+<script type="text/javascript">
+var defaultSmallGoodsImage = '{{defaultGoodsImage(240)}}';
+var defaultTinyGoodsImage = '{{defaultGoodsImage(60)}}';
+
+$(function(){
+    $('#files').tree({
+        expanded: 'li:lt(2)'
+    });
+
+    //浮动导航  waypoints.js
+    $('#main-nav-holder').waypoint(function(event, direction) {
+        $(this).parent().toggleClass('sticky', direction === "down");
+        event.stopPropagation();
+    });
+	// 单行显示更多
+	$('span[nc_type="show"]').click(function(){
+		s = $(this).parents('dd').prev().find('li[nc_type="none"]');
+		if(s.css('display') == 'none'){
+			s.show();
+			$(this).html('<i class="icon-angle-up"></i>{{lang('goods:class_index_retract')}}');
+		}else{
+			s.hide();
+			$(this).html('<i class="icon-angle-down"></i>{{lang('goods:class_index_more')}}');
+		}
+	});
+
+	{% if app.request.getGet('area_id') > 0 %}
+	// 选择地区后的地区显示
+	$('[nc_type="area_name"]').html(nc_class_a[{{app.request.getGet('area_id')}}]);
+	{%endif%}
+
+	{% if app.request.getGet('cate_id') > 0 %}
+	// 推荐商品异步显示
+    $('div[nctype="booth_goods"]').load("{{path('search/index/getBoothGoods', {cate_id: app.request.getGet('cate_id')})|raw}}", function(){
+        $(this).show();
+    });
+    {%endif%}
+});
+</script>
+{% endblock %}

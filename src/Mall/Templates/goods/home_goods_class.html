@@ -1,0 +1,57 @@
+ <div class="title">
+        <h3><a href="{{path('category')}}">{{lang('common:nc_all_goods_class')}}</a></h3>
+        <i class="arrow"></i></div>
+      <div class="category">
+        <ul class="menu">
+          {% if show_goods_class %}
+          {% set i=0 %} 
+          {% for val in show_goods_class %}
+          {% set i = i+1 %}
+          <li cat_id="{{val.gc_id}}" class="{%if i%2==1 %}odd{%else%}even{%endif%}" {%if i>8 %}style="display:none;"{%endif%}>
+            <div class="class">
+              {%if val.pic %}
+              <span class="ico"><img src="{{val.pic}}"></span>
+              {%endif%}
+              <h4><a href="{{path('search/index',{cate_id:val.gc_id})}}">{{val.gc_name}}</a></h4>
+              <span class="recommend-class">
+              {% if val.class3 %}
+              {%for v in val.class3%}
+              <a href="{{path('search/index',{cate_id:v.gc_id})}}" title="{{v.gc_name}}">{{v.gc_name}}</a>
+              {%endfor%}
+              {%endif%}
+              </span><span class="arrow"></span> </div>
+            <div class="sub-class" cat_menu_id="<?php echo $val['gc_id'];?>">
+              {% if val.class2 %}
+              {% for v in val.class2 %}
+              <dl>
+                <dt>
+                  <h3><a href="<?php echo urlShop('search','index',array('cate_id'=> $v['gc_id']));?>"><?php echo $v['gc_name'];?></a></h3>
+                </dt>
+                <dd class="goods-class">
+                  {% if v.class3 %}
+                  {%for v in v.class3%}
+                  <a href="<?php echo urlShop('search','index',array('cate_id'=> $v3['gc_id']));?>"><?php echo $v3['gc_name'];?></a>
+                  {%endfor%}
+              	  {%endif%}
+                </dd>
+                {% if v.brands %}
+                {% set n=0 %}
+                <dd class="brands-class">
+                  <h5>{{lang(common:nc_brand)}}{{lang('nc_colon')}}</h5>
+                  {%for k3 in v.brands%}
+                  	{%set n=n+1%}
+                  	{%if n<10 %}
+                    <a href="<?php echo urlShop('brand','list',array('brand'=> $v3['brand_id'])); ?>"><?php echo $v3['brand_name'];?></a>
+                  	{%endif%}
+                  {%endfor%}
+                </dd>
+                {%endif%}
+              </dl>
+              {%endfor%}
+              {%endif%}
+            </div>
+          </li>
+          {%endfor%}
+          {%endif%}
+        </ul>
+      </div>

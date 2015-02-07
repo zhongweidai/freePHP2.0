@@ -1,0 +1,41 @@
+{% extends 'layout-webfront.html' %}
+{% block content %}
+<style type="text/css">
+body,.header-wrap { background-color: #FAFAFA;}
+.wrapper { width: 1000px;}
+#faq { display: none;}
+.msg { font: 100 36px/48px arial,"microsoft yahei"; color: #555; background-color: #FFF; text-align: center; width: 100%; border: solid 1px #E6E6E6; margin-bottom: 10px; padding: 120px 0;}
+.msg i { font-size: 48px; vertical-align: middle; margin-right: 10px;}
+</style>
+<script type="text/javascript">
+$(function(){
+	$("#details").children('ul').children('li').click(function(){
+		$(this).parent().children('li').removeClass("current");
+		$(this).addClass("current");
+		$('#search_act').attr("value",$(this).attr("act"));
+	});
+	var search_act = $("#details").find("li[class='current']").attr("act");
+	$('#search_act').attr("value",search_act);
+	$("#keyword").blur();
+});
+</script>
+
+<div class="header-wrap"><header class="public-head-layout wrapper">
+  <h1 class="site-logo"><a href="{{path()}}">
+  <img src="{{cAttache('logo.png')}}" class="pngFix"></a></h1></header></div>
+<div class="msg">
+	{%if status == 0%}
+      <i class="icon-info-sign" style="color: #D93600;"></i>
+    {%else%}
+      <i class="icon-ok-sign" style=" color: #27AE61;"></i>
+    {%endif%}
+        {{message}}
+</div>
+<script type="text/javascript">
+{%if redirect_url%}
+	window.setTimeout("javascript:location.href='{{redirect_url}}'", {{time}});
+{%else%}
+	window.setTimeout("javascript:history.back()", {{time}});
+{%endif%}
+</script>
+{% endblock %}

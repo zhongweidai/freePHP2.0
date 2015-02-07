@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class=""> <!--<![endif]-->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} {{ setting('site.name', '多用户商城') }} - {% if setting('site.slogan') %}{{ setting('site.slogan') }} -{% endif %} Powered by US{% endblock %}</title>
+    <meta name="keywords" content="{% block keywords %}{% endblock %}" />
+    <meta name="description" content="{% block description %}{% endblock %}" />
+    <meta content="{{ csrf_token('site') }}" name="csrf-token" />
+    <style type="text/css">
+        body {
+            _behavior: url({{assets('style/default/css/csshover.htc')}});
+        }
+    </style>
+    <link href="{{assets('style/default/css/base.css')}}" rel="stylesheet" type="text/css">
+    <link href="{{assets('style/default/css/home_header.css')}}" rel="stylesheet" type="text/css">
+    <link href="{{assets('style/default/css/home_login.css')}}" rel="stylesheet" type="text/css">
+    <link href="{{assets('resource/font/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet" />
+    <!--[if IE 7]>
+    <link rel="stylesheet" href="{{assets('resource/font/font-awesome/css/font-awesome-ie7.min.css')}}">
+    <![endif]-->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="{{assets('data/resource/js/html5shiv.js')}}"></script>
+    <script src="{{assets('data/resource/js/respond.min.js')}}"></script>
+    <![endif]-->
+    <!--[if IE 6]>
+    <script src="{{assets('data/resource/js/IE6_PNG.js')}}"></script>
+    <script>
+        DD_belatedPNG.fix('.pngFix');
+    </script>
+    <script>
+        // <![CDATA[
+if((window.navigator.appName.toUpperCase().indexOf("MICROSOFT")>=0)&&(document.execCommand))
+try{
+document.execCommand("BackgroundImageCache", false, true);
+   }
+catch(e){}
+// ]]>
+</script>
+<![endif]-->
+    <script>
+        var COOKIE_PRE = '4E47_';
+		var _CHARSET = 'utf-8';
+		var SITEURL = '{{assets()}}';
+		var SHOP_SITE_URL = '{{assets()}}';
+		var RESOURCE_SITE_URL = '{{assets('resource')}}';
+		var RESOURCE_SITE_URL = '{{assets('resource')}}';
+		var SHOP_TEMPLATES_URL = '{{assets('style/default')}}';
+    </script>
+    <script src="{{assets('data/resource/js/jquery.js')}}"></script>
+    <script src="{{assets('data/resource/js/common.js')}}" charset="utf-8"></script>
+    <script src="{{assets('data/resource/js/jquery-ui/jquery.ui.js')}}"></script>
+    <script src="{{assets('data/resource/js/jquery.validation.min.js')}}"></script>
+    <script src="{{assets('data/resource/js/jquery.masonry.js')}}"></script>
+    <script src="{{assets('data/resource/js/dialog/dialog.js')}}" id="dialog_js" charset="utf-8"></script>
+    <script type="text/javascript">
+        var PRICE_FORMAT = '&yen;%s';
+        $(function(){
+            //首页左侧分类菜单
+            $(".category ul.menu").find("li").each(
+                    function() {
+                        $(this).hover(
+                                function() {
+                                    var cat_id = $(this).attr("cat_id");
+                                    var menu = $(this).find("div[cat_menu_id='"+cat_id+"']");
+                                    menu.show();
+                                    $(this).addClass("hover");
+                                    if(menu.attr("hover")>0) return;
+                                    menu.masonry({itemSelector: 'dl'});
+                                    var menu_height = menu.height();
+                                    if (menu_height < 60) menu.height(80);
+                                    menu_height = menu.height();
+                                    var li_top = $(this).position().top;
+                                    if ((li_top > 60) && (menu_height >= li_top)) $(menu).css("top",-li_top+50);
+                                    if ((li_top > 150) && (menu_height >= li_top)) $(menu).css("top",-li_top+90);
+                                    if ((li_top > 240) && (li_top > menu_height)) $(menu).css("top",menu_height-li_top+90);
+                                    if (li_top > 300 && (li_top > menu_height)) $(menu).css("top",60-menu_height);
+                                    if ((li_top > 40) && (menu_height <= 120)) $(menu).css("top",-5);
+                                    menu.attr("hover",1);
+                                },
+                                function() {
+                                    $(this).removeClass("hover");
+                                    var cat_id = $(this).attr("cat_id");
+                                    $(this).find("div[cat_menu_id='"+cat_id+"']").hide();
+                                }
+                        );
+                    }
+            );
+            $(".head-user-menu dl").hover(function() {
+                        $(this).addClass("hover");
+                    },
+                    function() {
+                        $(this).removeClass("hover");
+                    });
+            $('.head-user-menu .my-mall').mouseover(function(){// 最近浏览的商品
+                load_history_information();
+                $(this).unbind('mouseover');
+            });
+            $('.head-user-menu .my-cart').mouseover(function(){// 运行加载购物车
+                load_cart_information();
+                $(this).unbind('mouseover');
+            });
+            $('#button').click(function(){
+                if ($('#keyword').val() == '') {
+                    return false;
+                }
+            });
+        });
+    </script>
+    <style type="text/css">
+        <!--
+        .STYLE1 {
+            color: #FF0000;
+            font-weight: bold;
+            font-size: 24px;
+        }
+        -->
+    </style>
+</head>
+<body>
+<!-- <p align="center">
+    PublicTopLayout Begin<br>
+    <span class="STYLE1">防止其他【骗子网站使用本站演示】唯一QQ：303501108 </span></p><br><br>
+<p> -->
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="public-top-layout w">
+    <div class="topbar wrapper">
+        <div class="user-entry">
+            您好，欢迎来到      <a href="{{path()}}" title="首页" alt="首页">溢汇商城</a>
+            <span>[<a href="{{path('security/login')}}">登录</a>]</span>
+            <span>[<a href="{{path('security/register')}}">注册</a>]</span>
+            <span class="seller-login"><a href="{{path('security/sellerLogin')}}" target="_blank" title="登录商家管理中心"><i class="icon-signin"></i>商家管理中心</a></span></div>
+
+        <div class="quick-menu">
+            <dl>
+                <dt><a href="{{path('order/memberOrder')}}">我的订单</a><i></i></dt>
+                <dd>
+                    <ul>
+                        <li><a href="{{path('order/memberOrder',{state_type:'state_new'})}}">待付款订单</a></li>
+                        <li><a href="{{path('order/memberOrder',{state_type:'state_send'})}}">待确认收货</a></li>
+                        <li><a href="{{path('order/memberOrder',{state_type:'state_noeval'})}}">待评价交易</a></li>
+                    </ul>
+                </dd>
+            </dl>
+            <dl>
+                <dt><a href="{{path('member/favorites/fglist')}}">我的收藏</a><i></i></dt>
+                <dd>
+                    <ul>
+                        <li><a href="{{path('member/favorites/fglist')}}">商品收藏</a></li>
+                        <li><a href="{{path('member/favorites/flist')}}">店铺收藏</a></li>
+                    </ul>
+                </dd>
+            </dl>
+            <dl>
+                <dt>客户服务<i></i></dt>
+                <dd>
+                    <ul>
+                        <li><a href="{{path('article/article',{ac_id:2})}}">帮助中心</a></li>
+                        <li><a href="{{path('article/article',{ac_id:5})}}">售后服务</a></li>
+                        <li><a href="{{path('article/article',{ac_id:6})}}">客服中心</a></li>
+                    </ul>
+                </dd>
+            </dl>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function(){
+        $(".quick-menu dl").hover(function() {
+                    $(this).addClass("hover");
+                },
+                function() {
+                    $(this).removeClass("hover");
+                });
+
+    });
+</script>
+<!-- PublicHeadLayout Begin -->
+</p>
+<div class="header-wrap">
+    <header class="public-head-layout wrapper">
+        <h1 class="site-logo"><a href="{{path()}}"><img src="{{cAttache('logo.png')}}" class="pngFix"></a></h1>
+        <div class="head-search-bar">
+            <form action="{{path()}}" method="get" class="search-form">
+                <input name="m" id="search_act" value="search" type="hidden">
+                <input name="keyword" id="keyword" type="text" class="input-text" value="" maxlength="60" x-webkit-speech lang="zh-CN" onwebkitspeechchange="foo()" placeholder="请输入您要搜索的商品关键字" x-webkit-grammar="builtin:search" />
+                <input type="submit" id="button" value="搜索" class="input-submit">
+            </form>
+            <div class="keyword">热门搜索：        <ul>
+                    <li><a href="{{path('search/index',{keyword:'周大福'})}}">周大福</a></li>
+                    <li><a href="{{path('search/index',{keyword:'内衣'})}}">内衣</a></li>
+                    <li><a href="{{path('search/index',{keyword:'金史密斯'})}}">金史密斯</a></li>
+                    <li><a href="{{path('search/index',{keyword:'手机'})}}">手机</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="head-user-menu">
+            <dl class="my-mall">
+                <dt><span class="ico"></span>我的商城<i class="arrow"></i></dt>
+                <dd>
+                    <div class="sub-title">
+                        <h4></h4>
+                        <a href="{{path('member/sns/index')}}" class="arrow">我的用户中心<i></i></a></div>
+                    <div class="user-centent-menu">
+                        <ul>
+                            <li><a href="{{path('member/home/message')}}">站内消息(<span>0</span>)</a></li>
+                            <li><a href="{{path('order/memberOrder')}}" class="arrow">我的订单<i></i></a></li>
+                            <li><a href="{{path('member/consult/my_consult')}}">咨询回复(<span id="member_consult">0</span>)</a></li>
+                            <li><a href="{{path('member/favorites/fglist')}}" class="arrow">我的收藏<i></i></a></li>
+                            <li><a href="{{path('member/voucher')}}">代金券(<span id="member_voucher">0</span>)</a></li>
+                            <li><a href="{{path('member/points')}}" class="arrow">我的积分<i></i></a></li>
+                        </ul>
+                    </div>
+                    <div class="browse-history">
+                        <div class="part-title">
+                            <h4>最近浏览的商品</h4>
+                        </div>
+                        <ul>
+                            <li class="no-goods"><img class="loading" src="{{assets('style/default/images/loading.gif')}}" /></li>
+                        </ul>
+                    </div>
+                </dd>
+            </dl>
+            <dl class="my-cart">
+                <dt><span class="ico"></span>购物车结算<i class="arrow"></i></dt>
+                <dd>
+                    <div class="sub-title">
+                        <h4>最新加入的商品</h4>
+                    </div>
+                    <div class="incart-goods-box">
+                        <div class="incart-goods"> <img class="loading" src="{{assets('style/default/images/loading.gif')}}" /> </div>
+                    </div>
+                    <div class="checkout"> <span class="total-price">共<i>0</i>种商品</span><a href="{{path('order/cart')}}" class="btn-cart">结算购物车中的商品</a> </div>
+                </dd>
+            </dl>
+        </div>
+    </header>
+</div>
+<!-- PublicHeadLayout End -->
+<!-- publicNavLayout Begin -->
+<nav class="public-nav-layout">
+  <div class="wrapper">
+    <div class="all-category">
+		{{freeRender('index/index/categoryTree')}}
+     </div>
+    <ul class="site-menu">
+      <li><a href="http://127.0.0.1:71/shopnc/shop" class="current">首页</a></li>
+            <li><a href="http://127.0.0.1:71/shopnc/shop/index.php?act=show_groupbuy&op=index" > 团购</a></li>
+            <li><a href="http://127.0.0.1:71/shopnc/shop/index.php?act=brand&op=index" > 品牌</a></li>
+            <li><a href="http://127.0.0.1:71/shopnc/shop/index.php?act=pointprod&op=index" > 积分中心</a></li>
+                                                                              <li><a
+         target="_blank" href="http://www.shopjl.com/yanshi/2/cms">门户</a></li>
+                        <li><a
+         target="_blank" href="http://www.shopjl.com/yanshi/2/circle">圈子</a></li>
+                        <li><a
+         target="_blank" href="http://www.shopjl.com/yanshi/2/microshop">微商城</a></li>
+                      </ul>
+  </div>
+</nav>
+<!-- PublicNavLayout End-->
+{% block content %}{% endblock %}
+
+<div id="faq">
+  <div class="wrapper">
+    <ul>
+           <li> <dl class="s1">
+      <dt>
+        帮助中心      </dt>
+                  <dd><i></i><a href="http://127.0.0.1:71/shopnc/shop/index.php?act=article&op=show&article_id=40" title="积分兑换说明"> 积分兑换说明 </a></dd>
+            <dd><i></i><a href="http://127.0.0.1:71/shopnc/shop/index.php?act=article&op=show&article_id=9" title="我要买"> 我要买 </a></dd>
+            <dd><i></i><a href="http://127.0.0.1:71/shopnc/shop/index.php?act=article&op=show&article_id=6" title="如何注册成为会员"> 如何注册成为会员 </a></dd>
+            <dd><i></i><a href="http://127.0.0.1:71/shopnc/shop/index.php?act=article&op=show&article_id=39" title="积分细则"> 积分细则 </a></dd>
+            <dd><i></i><a href="http://127.0.0.1:71/shopnc/shop/index.php?act=article&op=show&article_id=8" title="忘记密码"> 忘记密码 </a></dd>
+                </dl></li>
+               <li> <dl class="s2">
+      <dt>
+        店主之家      </dt>
+                  <dd><i></i><a href="http://127.0.0.1:71/shopnc/shop/index.php?act=article&op=show&article_id=15" title="如何申请开店"> 如何申请开店 </a></dd>
+            <dd><i></i><a href="http://127.0.0.1:71/shopnc/shop/index.php?act=article&op=show&article_id=12" title="查看售出商品"> 查看售出商品 </a></dd>
+            <dd><i></i><a href="http://127.0.0.1:71/shopnc/shop/index.php?act=article&op=show&article_id=14" title="商城商品推荐"> 商城商品推荐 </a></dd>
+            <dd><i></i><a href="http://127.0.0.1:71/shopnc/shop/index.php?act=article&op=show&article_id=11" title="如何管理店铺"> 如何管理店铺 </a></dd>
+            <dd><i></i><a href="http://127.0.0.1:71/shopnc/shop/index.php?act=article&op=show&article_id=13" title="如何发货"> 如何发货 </a></dd>
+                </dl></li>
+               <li> <dl class="s3">
+      <dt>
+        支付方式      </dt>
+                  <dd><i></i><a href="http://127.0.0.1:71/shopnc/shop/index.php?act=article&op=show&article_id=28" title="分期付款"> 分期付款 </a></dd>
+            <dd><i></i><a href="http://127.0.0.1:71/shopnc/shop/index.php?act=article&op=show&article_id=30" title="公司转账"> 公司转账 </a></dd>
+            <dd><i></i><a href="http://127.0.0.1:71/shopnc/shop/index.php?act=article&op=show&article_id=17" title="在线支付"> 在线支付 </a></dd>
+            <dd><i></i><a href="http://127.0.0.1:71/shopnc/shop/index.php?act=article&op=show&article_id=29" title="邮局汇款"> 邮局汇款 </a></dd>
+            <dd><i></i><a href="http://127.0.0.1:71/shopnc/shop/index.php?act=article&op=show&article_id=16" title="如何注册支付宝"> 如何注册支付宝 </a></dd>
+                </dl></li>
+               <li> <dl class="s4">
+      <dt>
+        售后服务      </dt>
+                  <dd><i></i><a href="http://127.0.0.1:71/shopnc/shop/index.php?act=article&op=show&article_id=32" title="退换货流程"> 退换货流程 </a></dd>
+            <dd><i></i><a href="http://127.0.0.1:71/shopnc/shop/index.php?act=article&op=show&article_id=34" title="退款申请"> 退款申请 </a></dd>
+            <dd><i></i><a href="http://127.0.0.1:71/shopnc/shop/index.php?act=article&op=show&article_id=31" title="退换货政策"> 退换货政策 </a></dd>
+            <dd><i></i><a href="http://127.0.0.1:71/shopnc/shop/index.php?act=article&op=show&article_id=33" title="返修/退换货"> 返修/退换货 </a></dd>
+            <dd><i></i><a href="http://127.0.0.1:71/shopnc/shop/index.php?act=article&op=show&article_id=26" title="联系卖家"> 联系卖家 </a></dd>
+                </dl></li>
+               <li> <dl class="s5">
+      <dt>
+        客服中心      </dt>
+                  <dd><i></i><a href="http://127.0.0.1:71/shopnc/shop/index.php?act=article&op=show&article_id=18" title="会员修改密码"> 会员修改密码 </a></dd>
+            <dd><i></i><a href="http://127.0.0.1:71/shopnc/shop/index.php?act=article&op=show&article_id=20" title="商品发布"> 商品发布 </a></dd>
+            <dd><i></i><a href="http://127.0.0.1:71/shopnc/shop/index.php?act=article&op=show&article_id=19" title="会员修改个人资料"> 会员修改个人资料 </a></dd>
+            <dd><i></i><a href="http://127.0.0.1:71/shopnc/shop/index.php?act=article&op=show&article_id=21" title="修改收货地址"> 修改收货地址 </a></dd>
+                </dl></li>
+               <li> <dl class="s6">
+      <dt>
+        关于我们      </dt>
+                  <dd><i></i><a href="http://127.0.0.1:71/shopnc/shop/index.php?act=article&op=show&article_id=23" title="联系我们"> 联系我们 </a></dd>
+            <dd><i></i><a href="http://127.0.0.1:71/shopnc/shop/index.php?act=article&op=show&article_id=25" title="合作及洽谈"> 合作及洽谈 </a></dd>
+            <dd><i></i><a href="http://127.0.0.1:71/shopnc/shop/index.php?act=article&op=show&article_id=22" title="关于ShopNC"> 关于ShopNC </a></dd>
+            <dd><i></i><a href="http://127.0.0.1:71/shopnc/shop/index.php?act=article&op=show&article_id=24" title="招聘英才"> 招聘英才 </a></dd>
+                </dl></li>
+        </ul>
+      </div>
+</div>
+<div id="footer" class="wrapper">
+  <p><a href="http://127.0.0.1:71/shopnc/shop">首页</a>
+                | <a  href="http://www.shopjl.com/yanshi/2/shop/index.php?act=article&article_id=24">招聘英才</a>
+                | <a  href="http://www.shopjl.com/yanshi/2/shop/index.php?act=article&article_id=25">合作及洽谈</a>
+                | <a  href="http://www.shopjl.com/yanshi/2/shop/index.php?act=article&article_id=23">联系我们</a>
+                | <a  href="http://www.shopjl.com/yanshi/2/shop/index.php?act=article&article_id=22">关于ShopNC</a>
+                                      </p>
+  Copyright 2007-2014 ShopNC Inc.,All rights reserved.<br />
+  Powered by <span class="vol"><font class="b">Shop</font><font class="o">NC</font></span> <br />
+   </div>
+<script type="text/javascript" src="{{assets('data/resource/js/jquery.cookie.js')}}"></script>
+<script type="text/javascript" src="{{assets('data/resource/js/perfect-scrollbar.min.js')}}"></script>
+<script type="text/javascript" src="{{assets('data/resource/js/jquery.mousewheel.js')}}"></script>
+<script language="javascript">
+$(function(){
+	// Membership card
+	$('[nctype="mcard"]').membershipCard({type:'shop'});
+});
+</script>
+</body>
+</html>
+ 
