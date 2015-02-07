@@ -10,33 +10,33 @@ namespace Component\Model;
  */
 Abstract class AbstractFreeModel{
     protected $_container;
-	const MUST_VALIDATE         =   1;// 必须验证
+	const MUSTvalidate         =   1;// 必须验证
 	const EXISTS_VAILIDATE      =   0;// 表单存在字段则验证
 	const VALUE_VAILIDATE       =   2;// 表单值不为空则验证
 	const MODEL_INSERT      =   1;      //  插入模型数据
     const MODEL_UPDATE    =   2;      //  更新模型数据
     const MODEL_BOTH      =   3;      //  包含上面两种方式
 	//array(field,rule,message,condition,function,type,where)
-	protected $_validate = array();//
-    protected $_validate_field = array();//
-	protected $_deal = array();//
+	protected $validate = array();//
+    protected $validate_field = array();//
+	protected $deal = array();//
 	//数据库配置
-	protected $db_config = '';
+	protected $dbConfig = '';
 	//数据库连接
 	protected $db = '';
 	//调用数据库的配置项
 	//数据表名
-	protected $table_name = '';
+	protected $tableName = '';
 	//表前缀
-	protected  $db_tablepre = '';
-	protected $_pk_id = 'ID';
+	protected  $dbTablepre = '';
+	protected $pkId = '';
 	public $error = '';
 	
 	//是否自动验证 完成 
-	protected $_is_auto = 1;
+	protected $isAuto = 1;
 	
 	//是否开启hash验证 
-	protected $_is_hash = 1;
+	protected $isHash = 1;
 	    // 数据库表达式
     protected $comparison = array('eq'=>'=','neq'=>'<>','gt'=>'>','egt'=>'>=','lt'=>'<','elt'=>'<=','notlike'=>'NOT LIKE','like'=>'LIKE');
 	
@@ -44,7 +44,12 @@ Abstract class AbstractFreeModel{
 	
 	public function getTableName()
 	{
-		return $this->table_name;
+		return $this->tableName;
+	}
+	
+	public function getDb()
+	{
+	    return $this->db;
 	}
 	/**
      +----------------------------------------------------------
@@ -92,12 +97,12 @@ Abstract class AbstractFreeModel{
     public function validation($data,$type=1) 
     {
         // 属性验证
-        if(!empty($this->_validate) && ($this->_is_auto == 1 || $this->_validate_field)) {
+        if(!empty($this->validate) && ($this->isAuto == 1 || $this->validate_field)) {
             // 如果设置了数据自动验证
             // 则进行数据验证
             // 重置验证错误信息
-            foreach($this->_validate as $key=>$val) {
-                if($this->_validate_field && !in_array($val[0],$this->_validate_field))
+            foreach($this->validate as $key=>$val) {
+                if($this->validate_field && !in_array($val[0],$this->validate_field))
                 {
                     continue;
                 }
@@ -115,7 +120,7 @@ Abstract class AbstractFreeModel{
 					continue;
 				}
 				switch($val[3]) {
-					case self::MUST_VALIDATE:   // 必须验证 不管表单是否有设置该字段
+					case self::MUSTvalidate:   // 必须验证 不管表单是否有设置该字段
 						if(false === $this->_validationField($data,$val,$type))
 						{
 							$this->error    =   $val[2];
@@ -143,13 +148,13 @@ Abstract class AbstractFreeModel{
 						}
 				}
 			}
-			if($this->_is_hash == 1 && !Free::getApp()->checkCsrf())
+			if($this->isHash == 1 && !Free::getApp()->checkCsrf())
 			{
 				$this->error = 'hash error.';
 				return false;
 			}
 		}
-        $this->_validate_field = array();
+        $this->validate_field = array();
 		return true;
         //return true;
     }
@@ -220,7 +225,7 @@ Abstract class AbstractFreeModel{
                 }
 				if($type == self::MODEL_UPDATE)
 				{
-					!empty($this->where[$this->_pk_id]) && $where = array_merge($where,array($this->_pk_id=>array('neq',$this->where[$this->_pk_id])));
+					!empty($this->where[$this->pkId]) && $where = array_merge($where,array($this->pkId=>array('neq',$this->where[$this->pkId])));
 					is_array($val[6]) && $where = array_merge($where,$val[6]);
 				}
 				return $this->_unique($where);
@@ -260,7 +265,7 @@ Abstract class AbstractFreeModel{
      */
 	public function setValidate($_v=array())
 	{
-		$this->_validate = array_merge($this->_validate,$_v);
+		$this->validate = array_merge($this->validate,$_v);
 	}
 	/**
      +----------------------------------------------------------
@@ -289,7 +294,7 @@ Abstract class AbstractFreeModel{
      */
 	public function setDeal($_v=array())
 	{
-		$this->_deal = array_merge($this->_deal,$_v);
+		$this->deal = array_merge($this->deal,$_v);
 	}
 	/**
      +----------------------------------------------------------
@@ -309,10 +314,10 @@ Abstract class AbstractFreeModel{
         {
             unset($data['__hash__']);
         }
-		if(!empty($this->_deal) && $this->_is_auto == 1 ) {
+		if(!empty($this->deal) && $this->isAuto == 1 ) {
 			// 如果设置了数据自动处理
 			// 则进行数据二次处理
-			foreach($this->_deal as $key=>$val) {
+			foreach($this->deal as $key=>$val) {
 				// 判断验证条件
 				if(!( empty($val[3]) || $val[3]== self::MODEL_BOTH || $val[3]== $type))
 				{
@@ -351,7 +356,7 @@ Abstract class AbstractFreeModel{
      */
 	public function openAuto()
 	{
-		$this->_is_auto = 1;
+		$this->isAuto = 1;
 		return $this;
 	}
 	/**
@@ -365,7 +370,7 @@ Abstract class AbstractFreeModel{
      */
 	public function closeAuto()
 	{
-		$this->_is_auto = 0;
+		$this->isAuto = 0;
 		return $this;
 	}
 	/**
@@ -380,7 +385,7 @@ Abstract class AbstractFreeModel{
      
     public function setValidateField($field)
     {
-        is_array($field) && $this->_validate_field = $field;
+        is_array($field) && $this->validate_field = $field;
         return $this;
     }
 	
@@ -395,7 +400,7 @@ Abstract class AbstractFreeModel{
      */
 	public function openHash()
 	{
-		$this->_is_hash = 1;
+		$this->isHash = 1;
 		return $this;
 	}
 	/**
@@ -409,7 +414,7 @@ Abstract class AbstractFreeModel{
      */
 	public function closeHash()
 	{
-		$this->_is_hash = 0;
+		$this->isHash = 0;
 		return $this;
 	}
 }

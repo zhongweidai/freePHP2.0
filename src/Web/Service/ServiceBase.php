@@ -9,11 +9,13 @@
 namespace Web\Service;
 
 
+use Mall\Service\ServiceKernel;
+
 class ServiceBase
 {
 
     public function getModle($modelName)
     {
-        return \FreeKernel::container()->getModel($modelName);
+        return ServiceKernel::instance()->getModel($modelName);
     }
 }

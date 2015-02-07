@@ -7,6 +7,8 @@
  */
 define('IN_FREE', true);
 
+define('TIMESTAMP',time());
+//error_reporting(0);
 class FreeKernel
 {
     private static $_loader = NULL;
@@ -15,9 +17,12 @@ class FreeKernel
     public static function run($appName = 'Web')
     {
         self::_init_($appName);
-        //set_error_handler('myErrorHandler',E_ALL );
+       // set_error_handler('myErrorHandler',E_ALL );
+       // register_shutdown_function('shutdown');
+        self::container()->setAppName($appName);
         $app = new Free\Libs\FreeApplication(self::container());
         self::container()->setApp($app);
+
         $response = $app->run();
         if($response instanceof Component\Http\IFreeResponse)
         {
@@ -29,7 +34,7 @@ class FreeKernel
 
     public static function _init_($appName='Web')
     {
-        define('APP',$appName);
+        //define('APP',$appName);
 
         //自动注册类
         self::loader()->autoLoad();
@@ -50,7 +55,7 @@ class FreeKernel
         return self::container()->loadConfig($file,$key,$default,$reload);
     }
 
-    public static function SetConfig($configs)
+    public static function setConfig($configs)
     {
         return self::container()->setConfig($configs);
     }
@@ -80,6 +85,8 @@ class FreeContainer
     private $_model = array();
     private $_app = '';
 
+    private $_appName = '';
+
     private $_components = array(
         'route'              =>  'Component\Route\FreeDefaultRoute',
         'template'           =>  'Component\Template\FreeTwigTemplate',
@@ -99,9 +106,18 @@ class FreeContainer
         $this->_app = $app;
     }
 
-    public function loadApp()
+    public function getApp()
     {
         return $this->_app;
+    }
+
+    public function setAppName($appName)
+    {
+        $this->_appName = $appName;
+    }
+    public function getAppName()
+    {
+        return $this->_appName;
     }
 
     /**
@@ -181,11 +197,21 @@ class FreeContainer
 
     public function loadModel($modelName)
     {
-        $modelName = ucfirst($modelName);
         if(!isset($this->_model[$modelName]))
         {
-            $className = APP . "\\Model\\{$modelName}Model";
-            $this->_model[$modelName] = new  $className($this);
+            if (strpos($modelName, ':') > 0) {
+                list($appName, $name) = explode(':', $modelName, 2);
+            } else {
+                $appName = $this->_appName;
+                $name = $modelName;
+            }
+            $name = ucfirst($name);
+            $className = $appName . "\\Model\\{$name}Model";
+            try{
+                $this->_model[$modelName] = new  $className($this);
+            }catch ( \Exception $e){
+                throw new Free\Libs\FreeException("class [$className] not found.");
+            }
         }
         return $this->_model[$modelName];
 
@@ -204,13 +230,18 @@ class FreeLoader
 
     public function getPreNamespaces()
     {
-        return array(
+        $app_configs =  FreeKernel::container()->loadConfig('application');
+        $namespaces = array(
             'Free'          =>  FREE_PATH . 'free' . DIRECTORY_SEPARATOR ,
             'Component'    => FREE_PATH . 'free' . DIRECTORY_SEPARATOR . 'Component' . DIRECTORY_SEPARATOR ,
-            APP             =>  FREE_PATH . 'src' . DIRECTORY_SEPARATOR . APP . DIRECTORY_SEPARATOR ,
             'Utility'      => FREE_PATH . 'free' . DIRECTORY_SEPARATOR . 'Utility' . DIRECTORY_SEPARATOR ,
             '/'             =>  '',
         );
+        foreach($app_configs as $key => $val)
+        {
+            $namespaces [$key] = FREE_PATH . 'src' . DIRECTORY_SEPARATOR . $key . DIRECTORY_SEPARATOR;
+        }
+        return $namespaces;
     }
 
     public function setClasses($class,$path)
@@ -293,4 +324,15 @@ function myErrorHandler($errno, $errstr, $errfile, $errline)
     } else {
         throw new Free\Libs\FreeException('errorno:' . $errno . ',str:' . $errstr . 'in file:' . $errfile . ' in line ' . $errline,500);
     }
+}
+
+function shutdown()
+{
+    var_dump(debug_backtrace());
+    // This is our shutdown function, in
+    // here we can do any last operations
+    // before the script is complete.
+    $e = error_get_last();
+    print_r($e);
+    echo 'Script executed with success', PHP_EOL;
 }

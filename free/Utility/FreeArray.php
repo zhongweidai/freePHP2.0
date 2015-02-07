@@ -224,4 +224,20 @@ class FreeArray
 		
 		return $array;
 	}
+	
+	public static function arrayUnderReset($array, $key, $type=1){
+	    if (is_array($array)){
+	        $tmp = array();
+	        foreach ($array as $v) {
+	            if ($type === 1){
+	                $tmp[$v[$key]] = $v;
+	            }elseif($type === 2){
+	                $tmp[$v[$key]][] = $v;
+	            }
+	        }
+	        return $tmp;
+	    }else{
+	        return $array;
+	    }
+	}
 }

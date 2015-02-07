@@ -10,7 +10,7 @@ namespace Free\Libs;
  
 class FreeController{
     protected $_container;
-
+    private $isMajor = true;
     private $_templte = '';
     private $request = '';
     private $response = '';
@@ -100,7 +100,7 @@ class FreeController{
      * @return void
     +----------------------------------------------------------
      */
-    public function template($template,$data)
+    public function template($template,$data=array())
     {
         if(!$this->_templte)
         {
@@ -108,8 +108,26 @@ class FreeController{
         }
         $this->assign($data);
         $content = $this->_templte->render($template,$this->_out_put);
-        $this->getResponse()->setBody($content,'contentBody');
+        if($this->isMajor){
+            $this->getResponse()->setBody($content,'contentBody');
+            return $this->getResponse();
+        }else{
+            return $content;
+        }
+
+    }
+    
+    public function createStringResponse($data = '')
+    {
+    	$content= '';
+        is_array($data) && $data = json_encode($data);
+        $this->getResponse()->setBody($data,'contentBody');
         return $this->getResponse();
+    }
+    
+    public function setIsMajor($isMajor)
+    {
+        $this->isMajor = $isMajor;
     }
 
     public function getRequest()
@@ -120,6 +138,11 @@ class FreeController{
     public function getResponse()
     {
         return $this->response;
+    }
+    
+    public function forward($m,$c,$a)
+    {
+        return $this->_container->getApp()->run($m,$c,$a);
     }
 
 }

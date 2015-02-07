@@ -16,5 +16,5 @@ class UserModel  extends FreeModel
     /**
      * @var $table_name 数据库表名
      */
-    public $table_name = 'user';
+    public $tableName = 'user';
 }

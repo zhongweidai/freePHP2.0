@@ -16,7 +16,7 @@ class FreeDefaultRoute extends AbstractFreeRoute{
 	
 	public function __construct($container) {
         $this->_container = $container;
-		$config = $this->_container->loadConfig('application', APP);
+		$config = $this->_container->loadConfig('application', $this->_container->getAppName());
 		if(isset($config['route']))
 		{
 			$route_config = explode('/',$config['route']); 
@@ -71,7 +71,7 @@ class FreeDefaultRoute extends AbstractFreeRoute{
 	/* (non-PHPdoc)
 	 * @see AbstractWindRouter::assemble()
 	 */
-	public function assemble($action, $args = '',$script='') {
+	public function assemble($action='', $args = '',$script='') {
 		if(!empty($action))
 		{
 			$r = explode('/',$action);
@@ -81,7 +81,8 @@ class FreeDefaultRoute extends AbstractFreeRoute{
 		isset($r[1]) && !empty($r[1]) && $route['c'] = $r[1] ;
 		isset($r[2]) && !empty($r[2]) && $route['a'] = $r[2] ;
 		$script == '' && $script = $this->_container->getComponent('request')->getScript();
-		return $script . '?' .  (is_array($args) ? self::argsToUrl(array_merge($route, $args)) : (self::argsToUrl($route).$args));
+		$p =  (is_array($args) ? self::argsToUrl(array_merge($route, $args)) : (self::argsToUrl($route).$args));
+		return $p ?  $script . '?' .  $p : $script;
 	}
 	
 	public static function argsToUrl($args, $encode = true, $separator = '&=') {

@@ -107,7 +107,7 @@ class FreeFilter
         $_filter = array(
             'default_filter'=>'Component\Filter\FreeDefaultFilter',
         );
-        $app_config = $this->_container->loadConfig('application',APP);
+        $app_config = $this->_container->loadConfig('application',$this->_container->getAppName());
         $this->_filters = isset($app_config['filter'])&&is_array($app_config['filter']) ? array_merge($_filter,$app_config['filter']) : $_filter;
     }
 }

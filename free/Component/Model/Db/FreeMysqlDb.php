@@ -34,7 +34,7 @@ final class FreeMysqlDb extends AbstractFreeDb {
 	
 	public function __construct($container) {
         $this->_container = $container;
-        $config = $this->_container->loadConfig('database','oracle');
+        $config = $this->_container->loadConfig('database','mysql');
 		$this->open($config);
 	}
 	
@@ -59,7 +59,7 @@ final class FreeMysqlDb extends AbstractFreeDb {
 	 */
 	public function connect() {
 		$func = $this->config['pconnect'] == 1 ? 'mysql_pconnect' : 'mysql_connect';
-		if(!$this->link = @$func($this->config['hostname'], $this->config['username'], $this->config['password'], 1)) {
+		if(!$this->link = $func($this->config['hostname'], $this->config['username'], $this->config['password'], 1)) {
 			$this->halt('Can not connect to MySQL server');
 			return false;
 		}
@@ -87,7 +87,7 @@ final class FreeMysqlDb extends AbstractFreeDb {
 	 * @return 查询资源句柄
 	 */
 	protected function execute($sql) 
-    {//print_r($sql);
+    {print_r($sql);
 		if(!is_resource($this->link)) {
 			$this->connect();
 		}
@@ -126,11 +126,11 @@ final class FreeMysqlDb extends AbstractFreeDb {
 			array_walk($data, array($this, 'addSpecialChar'));
 			$data = implode(',', $data);
 		}
-		else{
+/* 		else{
 			$field = explode(',', $data);
 			array_walk($field, array($this, 'addSpecialChar'));
 			$data = implode(',', $field);
-		}
+		} */
         $limit && $limit = ' limit ' . $limit;
 		$sql = 'SELECT '.$data.' FROM `'.$this->config['database'].'`.`'.$table.'`'.$where.$group.$order.$limit;
 		$this->execute($sql);
@@ -175,11 +175,11 @@ final class FreeMysqlDb extends AbstractFreeDb {
 			array_walk($data, array($this, 'addSpecialChar'));
 			$data = implode(',', $data);
 		}
-		else{
+/* 		else{
 			$field = explode(',', $data);
 			array_walk($field, array($this, 'addSpecialChar'));
 			$data = implode(',', $field);
-		}
+		} */
 		$sql = 'SELECT '.$data.' FROM `'.$this->config['database'].'`.`'.$table.'`'.$where.$group.$order.$limit;
         $this->execute($sql);
 		$res = $this->fetchNext();
@@ -278,45 +278,6 @@ final class FreeMysqlDb extends AbstractFreeDb {
 	 * @return boolean
 	 */
 	public function update($data, $table, $where = '') {
-	   /**
-		if($table == '' or $where == '') {
-			return false;
-		}
-
-		$where = ' WHERE '.$where;
-		$field = '';
-		if(is_string($data) && $data != '') {
-			$field = $data;
-		} elseif (is_array($data) && count($data) > 0) {
-			$fields = array();
-			foreach($data as $k=>$v) {
-				switch (substr($v, 0, 2)) {
-					case '+=':
-						$v = substr($v,2);
-						if (is_numeric($v)) {
-							$fields[] = $this->addSpecialChar($k).'='.$this->addSpecialChar($k).'+'.$this->escapeString($v, '', false);
-						} else {
-							continue;
-						}
-						
-						break;
-					case '-=':
-						$v = substr($v,2);
-						if (is_numeric($v)) {
-							$fields[] = $this->addSpecialChar($k).'='.$this->addSpecialChar($k).'-'.$this->escapeString($v, '', false);
-						} else {
-							continue;
-						}
-						break;
-					default:
-						$fields[] = $this->addSpecialChar($k).'='.$this->escapeString($v);
-				}
-			}
-			$field = implode(',', $fields);
-		} else {
-			return false;
-		}
-        **/
         $where = $this->parseWhere($where);
 		if(empty($table) or empty($where) or empty($data)) {
 			return false;
@@ -490,11 +451,8 @@ final class FreeMysqlDb extends AbstractFreeDb {
 	 * @param $quotation 
 	 */
 	public function escapeString(&$value, $key='', $quotation = 1) {
-        if($this->_linkID) {
-            $value = mysql_real_escape_string($value,$this->_linkID);
-        }else{
-            $value = mysql_escape_string($value);
-        }
+
+        $value = mysql_real_escape_string($value);
 		if ($quotation) {
 			$q = '\'';
 		} else {

@@ -10,9 +10,21 @@ return array (
         ),
         'route' => 'index/index/init',
         //'filter'=>array('front_filter'=>'src/library/FrontFilter'),
-        'js_path' => '/portal/edu/statics/js/',
-        'css_path' => '/portal/edu/statics/css/',
-        'img_path' => '/portal/edu/statics/images/',
-    )
+        'assets_path' => 'assets',
+    ),
+    'Mall' => array(
+            'version'  => 'base',
+            'template-path' =>  'src/Mall/Templates/',
+            'Twig_extends' =>array(
+                'html'      =>  'Mall\Tags\Twig\WebHtmlExtension',
+                'data'        =>  'Mall\Tags\Twig\WebDataExtension',
+
+            ),
+            'route' => 'index/index/init',
+            //'filter'=>array('front_filter'=>'src/library/FrontFilter'),
+            'assets_path' => 'assets',
+        ),
+
+
 );
 ?>

@@ -16,10 +16,17 @@ return array(
     'cookie_path' => '/edu/',
     'cookie_pre' => 'pGClX_',
     'cookie_ttl' => 0,
-    'tablepre' => 'T_',
+    'tablepre' => 'shopnc_',
 
     'charset' => 'utf-8',
     'timezone' => 'Etc/GMT-8',
 
     'upload_path' => FREE_PATH.'upload/',
+    'upload_url' => '/freePHP/upload',
+        
+    'common_attache_path'=> 'shop/common',
+    'attach_goods'   => 'shop/store/goods', 
+     
+        
+    'fullindexer_open' =>false,
 );

@@ -315,7 +315,7 @@ class FreeHttpRequest implements IFreeRequest {
 	 * </pre>
 	 * 
 	 * @return string 
-	 * @throws WindException 当获取失败的时候抛出异常
+	 * @throws FreeException 当获取失败的时候抛出异常
 	 */
 	public function getRequestUri() {
 		if (!$this->_requestUri) $this->_initRequestUri();
@@ -331,7 +331,7 @@ class FreeHttpRequest implements IFreeRequest {
 	 * </pre>
 	 * 
 	 * @return string
-	 * @throws WindException 当获取失败的时候抛出异常
+	 * @throws FreeException 当获取失败的时候抛出异常
 	 */
 	public function getScriptUrl() {
 		if (!$this->_scriptUrl) $this->_initScriptUrl();
@@ -347,7 +347,7 @@ class FreeHttpRequest implements IFreeRequest {
 	 * </pre>
 	 * 
 	 * @return string
-	 * @throws WindException 当获取失败的时候抛出异常
+	 * @throws FreeException 当获取失败的时候抛出异常
 	 */
 	public function getScript() {
 		if (($pos = strrpos($this->getScriptUrl(), '/')) === false) $pos = -1;
@@ -382,7 +382,7 @@ class FreeHttpRequest implements IFreeRequest {
 	 * 
 	 * @see IWindRequest::getPathInfo()
 	 * @return string
-	 * @throws WindException
+	 * @throws FreeException
 	 */
 	public function getPathInfo() {
 		if (!$this->_pathInfo) $this->_initPathInfo();
@@ -403,7 +403,7 @@ class FreeHttpRequest implements IFreeRequest {
 	 * </pre>
 	 * @param boolean $absolute 是否返回主机信息
 	 * @return string
-	 * @throws WindException 当返回信息失败的时候抛出异常
+	 * @throws FreeException 当返回信息失败的时候抛出异常
 	 */
 	public function getBaseUrl($absolute = false) {
 		if ($this->_baseUrl === null) $this->_baseUrl = rtrim(dirname($this->getScriptUrl()), '\\/.');
@@ -419,7 +419,7 @@ class FreeHttpRequest implements IFreeRequest {
 	 * </pre>
 	 * @see IWindRequest::getHostInfo()
 	 * @return string
-	 * @throws WindException 获取主机信息失败的时候抛出异常
+	 * @throws FreeException 获取主机信息失败的时候抛出异常
 	 */
 	public function getHostInfo() {
 		if ($this->_hostInfo === null) $this->_initHostInfo();
@@ -539,7 +539,7 @@ class FreeHttpRequest implements IFreeRequest {
 	 * @return WindHttpResponse
 	 */
 	public function getResponse() {
-		$response = new WindHttpResponse();
+		$response = new FreeHttpResponse();
 		$response->setHeader('Content-type', 'text/html;charset=utf8');
 		return $response;
 	}
@@ -581,7 +581,7 @@ class FreeHttpRequest implements IFreeRequest {
 	 * 请求： http://www.phpwind.net/example/index.php?a=test
 	 * 则返回: /example/index.php?a=test
 	 * </pre>
-	 * @throws WindException 处理错误抛出异常
+	 * @throws FreeException 处理错误抛出异常
 	 */
 	private function _initRequestUri() {
 		if (($requestUri = $this->getServer('HTTP_X_REWRITE_URL')) != null) {
@@ -594,7 +594,7 @@ class FreeHttpRequest implements IFreeRequest {
 			$this->_requestUri = $requestUri;
 			if (($query = $this->getServer('QUERY_STRING')) != null) $this->_requestUri .= '?' . $query;
 		} else
-			throw new WindException(__CLASS__ . ' is unable to determine the request URI.');
+			throw new FreeException(__CLASS__ . ' is unable to determine the request URI.');
 	}
 
 	/**
@@ -604,11 +604,11 @@ class FreeHttpRequest implements IFreeRequest {
 	 * 请求: http://www.phpwind.net/example/index.php?a=test
 	 * 返回: /example/index.php
 	 * </pre>
-	 * @throws WindException 当获取失败的时候抛出异常
+	 * @throws FreeException 当获取失败的时候抛出异常
 	 */
 	private function _initScriptUrl() {
 		if (($scriptName = $this->getServer('SCRIPT_FILENAME')) == null) {
-			throw new WindException(__CLASS__ . ' determine the entry script URL failed!!!');
+			throw new FreeException(__CLASS__ . ' determine the entry script URL failed!!!');
 		}
 		$scriptName = basename($scriptName);
 		if (($_scriptName = $this->getServer('SCRIPT_NAME')) != null && basename($_scriptName) === $scriptName) {
@@ -623,7 +623,7 @@ class FreeHttpRequest implements IFreeRequest {
 			'SCRIPT_FILENAME')) != null && strpos($_scriptName, $_documentRoot) === 0) {
 			$this->_scriptUrl = str_replace('\\', '/', str_replace($_documentRoot, '', $_scriptName));
 		} else
-			throw new WindException(__CLASS__ . ' determine the entry script URL failed!!');
+			throw new FreeException(__CLASS__ . ' determine the entry script URL failed!!');
 	}
 
 	/**
@@ -633,7 +633,7 @@ class FreeHttpRequest implements IFreeRequest {
 	 * 请求: http://www.phpwind.net/example/index.php?a=test
 	 * 返回： http://www.phpwind.net/
 	 * </pre>
-	 * @throws WindException 获取主机信息失败的时候抛出异常
+	 * @throws FreeException 获取主机信息失败的时候抛出异常
 	 */
 	private function _initHostInfo() {
 		$http = $this->isSecure() ? 'https' : 'http';
@@ -643,7 +643,7 @@ class FreeHttpRequest implements IFreeRequest {
 			$this->_hostInfo = $http . '://' . $httpHost;
 			if (($port = $this->getServerPort()) != null) $this->_hostInfo .= ':' . $port;
 		} else
-			throw new WindException(__CLASS__ . ' determine the entry script URL failed!!');
+			throw new FreeException(__CLASS__ . ' determine the entry script URL failed!!');
 	}
 
 	/**
@@ -653,7 +653,7 @@ class FreeHttpRequest implements IFreeRequest {
 	 * 请求: http://www.phpwind.net/example/index.php?a=test
 	 * 返回: a=test
 	 * </pre>
-	 * @throws WindException
+	 * @throws FreeException
 	 */
 	private function _initPathInfo() {
 		$requestUri = $this->getRequestUri();
@@ -666,7 +666,7 @@ class FreeHttpRequest implements IFreeRequest {
 		elseif (strpos($_SERVER['PHP_SELF'], $scriptUrl) === 0)
 			$pathInfo = substr($_SERVER['PHP_SELF'], strlen($scriptUrl));
 		else
-			throw new WindException(__CLASS__ . ' determine the entry path info failed!!');
+			throw new FreeException(__CLASS__ . ' determine the entry path info failed!!');
 		if (($pos = strpos($pathInfo, '?')) !== false) $pathInfo = substr($pathInfo, $pos + 1);
 		$this->_pathInfo = trim($pathInfo, '/');
 	}

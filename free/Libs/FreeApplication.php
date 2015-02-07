@@ -19,7 +19,7 @@ final class FreeApplication{
 	private $controller;
 	private $action;
 	private $_run_num = 1;
-	/**
+    /**
 	 * 构造函数
 	 */
 	public function __construct($container)
@@ -93,12 +93,13 @@ final class FreeApplication{
 	private function loadController() 
 	{
 		$filename = ucfirst($this->rounteC);
-		$classname = APP. DIRECTORY_SEPARATOR  . 'Controller'. DIRECTORY_SEPARATOR .ucfirst($this->rounteM) . DIRECTORY_SEPARATOR . $filename . 'Controller';
-        if($controller = new $classname($this->_container))
+		$classname = $this->_container->getAppName(). "\\"  . 'Controller'. "\\" .ucfirst($this->rounteM) . "\\" . $filename . 'Controller';
+        if(class_exists($classname))
         {
+            $controller = new $classname($this->_container);
             return $controller;
         }else{
-            return false;
+            throw new FreeException($classname.' does not exist.','404');
         }
 	}
 	/**

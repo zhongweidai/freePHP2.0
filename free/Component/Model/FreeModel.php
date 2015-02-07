@@ -9,13 +9,12 @@ namespace Component\Model;
  */
 class FreeModel extends AbstractFreeModel{
 	//array(field,rule,message,condition,function,type,where)
-	protected $_validate = array();//
+	protected $validate = array();//
 
 	public function __construct($container) {
         $this->_container = $container;
-		$this->db_tablepre =$this->_container->loadConfig('system','tablepre');
-		!empty($table_name) && $this->table_name = $table_name;
-		$this->table_name = $this->db_tablepre .strtoupper($this->table_name);
+		$this->dbTablepre =$this->_container->loadConfig('system','tablepre');
+		$this->tableName = $this->dbTablepre .$this->tableName;
 		$this->db =  $this->_container->getComponent('db',array('arguments'=>$this->_container));
 	}
 		
@@ -29,8 +28,9 @@ class FreeModel extends AbstractFreeModel{
 	 * @param $key          返回数组按键名排序
 	 * @return array		查询结果集数组
 	 */
-	final public function select($where = array(), $data = array(), $limit = '', $order = '', $group = '', $key='id') {
-		return $this->db->select($data, $this->table_name, $where, $limit, $order, $group, $key);
+	final public function select($where = array(), $data = array(), $limit = '', $order = '', $group = '', $key='') {
+        empty($key) && $key = $this->pkId;
+	    return $this->db->select($data, $this->tableName, $where, $limit, $order, $group, $key);
 	}
 	/**
 	 * 查询多条数据并分页
@@ -40,17 +40,16 @@ class FreeModel extends AbstractFreeModel{
 	 * @param $pagesize
 	 * @return unknown_type
 	 */
-	final public function listInfo($where = array(), $data=array(), $order = '', $page = 1, $pagesize = 15, $key='',$page_style='default', $setpages = 10,$urlrule = '') {
-		$page_class = $this->getComponent('page');
-		$this->number = $this->count($where);
+	final public function listInfo($where = array(), $data=array(), $order = '', $page = 1, $pagesize = 15, $group='',$key='',$page_style='default', $setpages = 10,$urlrule = '') {
+		$page_class = $this->_container->getComponent('page');
+		$this->number = $this->count($where,$data,$group);
 		$page = max(intval($page), 1);
-
 		$this->pages = $page_class->show($this->number, $page, $pagesize, $page_style,$setpages,$urlrule);
 		$pagesize = $page_class->getPageRow();
 		$offset = $pagesize*($page-1);
-		$array = array();
+		
 		if ($this->number > 0) {
-			return $this->select($where, $data, "$offset, $pagesize", $order, '', $key);
+			return $this->select($where, $data, "$offset, $pagesize", $order, $group, $key);
 		} else {
 			return array();
 		}
@@ -65,7 +64,7 @@ class FreeModel extends AbstractFreeModel{
 	 * @return array/null	数据查询结果集,如果不存在，则返回空
 	 */
 	final public function getOne($where = array(), $data = array(), $order = '', $group = '') {
-		return $this->db->getOne($data, $this->table_name, $where, $order, $group);
+		return $this->db->getOne($data, $this->tableName, $where, $order, $group);
 	}
 	/**
 	 * 直接执行sql查询
@@ -73,7 +72,6 @@ class FreeModel extends AbstractFreeModel{
 	 * @return	boolean/query resource		如果为查询语句，返回资源句柄，否则返回true/false
 	 */
 	final public function query($sql,$key='') {
-		//$sql = str_replace('phpcms_', $this->db_tablepre, $sql);
 		return $this->db->query($sql,$key);
 	}
 	
@@ -88,7 +86,7 @@ class FreeModel extends AbstractFreeModel{
 		if($this->validation($data,1))
 		{
 			$this->deal($data,1);
-			return $this->db->insert($data, $this->table_name, $return_insert_id, $replace);
+			return $this->db->insert($data, $this->tableName, $return_insert_id, $replace);
 		}else{
 			return false;
 		}
@@ -117,7 +115,7 @@ class FreeModel extends AbstractFreeModel{
 		if($this->validation($data,2))
 		{
 			$this->deal($data,2);
-			return $this->db->update($data, $this->table_name, $where);
+			return $this->db->update($data, $this->tableName, $where);
 		}else{
 			return false;
 		}
@@ -130,15 +128,21 @@ class FreeModel extends AbstractFreeModel{
 	 * @return boolean
 	 */
 	final public function delete($where=array()) {
-		return $this->db->delete($this->table_name, $where);
+		return $this->db->delete($this->tableName, $where);
 	}
 	
 	/**
 	 * 计算记录数
 	 * @param string/array $where 查询条件
 	 */
-	public function count($where = array()) {
-		$r = $this->getOne($where, "COUNT(*) AS TNUM");
+	public function count($where = array(),$field='') {
+	    if(!$field)
+	    {
+	        $field = "COUNT(*) AS TNUM";
+	    }else{
+	        $field = "$field, COUNT(*) AS TNUM";
+	    }
+		$r = $this->getOne($where, $field);
 		return $r['TNUM'];
 	}
 	
@@ -155,21 +159,21 @@ class FreeModel extends AbstractFreeModel{
 	 * @return array
 	 */
 	public function getPrimary() {
-		return $this->db->getPrimary($this->table_name);
+		return $this->db->getPrimary($this->tableName);
 	}
 	
 	/**
 	 * 获取表字段
-	 * @param string $table_name    表名
+	 * @param string $tableName    表名
 	 * @return array
 	 */
-	final public function getFields($table_name = '') {
-		if (empty($table_name)) {
-			$table_name = $this->table_name;
+	final public function getFields($tableName = '') {
+		if (empty($tableName)) {
+			$tableName = $this->tableName;
 		} else {
-			$table_name = $this->db_tablepre.$table_name;
+			$tableName = $this->dbTablepre.$tableName;
 		}
-		return $this->db->getFields($table_name);
+		return $this->db->getFields($tableName);
 	}
 	
 	/**
@@ -178,7 +182,7 @@ class FreeModel extends AbstractFreeModel{
 	 * @return boolean
 	 */
 	final public function tableExists($table){
-		return $this->db->tableExists($this->db_tablepre.$table);
+		return $this->db->tableExists($this->dbTablepre.$table);
 	}
 	
 	/**
@@ -187,9 +191,9 @@ class FreeModel extends AbstractFreeModel{
 	 * @return boolean
 	 */
 	public function fieldExists($field) {
-		//$fields = $this->db->get_fields($this->table_name);
+		//$fields = $this->db->get_fields($this->tableName);
 		//return array_key_exists($field, $fields);
-		return $this->db->fieldExists($this->table_name, $field);
+		return $this->db->fieldExists($this->tableName, $field);
 	}
 	
 	final public function listTables() {
