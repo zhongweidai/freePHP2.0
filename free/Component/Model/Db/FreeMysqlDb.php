@@ -87,7 +87,7 @@ final class FreeMysqlDb extends AbstractFreeDb {
 	 * @return 查询资源句柄
 	 */
 	protected function execute($sql) 
-    {print_r($sql);
+    {
 		if(!is_resource($this->link)) {
 			$this->connect();
 		}

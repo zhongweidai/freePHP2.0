@@ -11,7 +11,7 @@ namespace Component\Log;
 class FreeLogContainer
 {
 	private $key = 'LogContainer';
-    
+    private $_instance = NULL;
     private $container = array();
     
     public function __construct()
@@ -19,36 +19,77 @@ class FreeLogContainer
         
     }
 	
-    public function put($log,$key='error')
-    {
-        $this->container[$key][] = $log;
+	static public function instance()
+	{
+		if(self::_instance === NULL)
+		{
+			self::_instance = new self();
+		}
+		return self::_instance;
+	}
+	
+	public function setContainer($log,$key)
+	{
+		$this->container[$key][] = $log;
         return true;
+	}
+	public function getContainer()
+	{
+		return $this->container;
+	}
+    public static function put($log,$key='system')
+    {
+        return self::instance()->setContainer($log,$key);
     }
 	
-    public function flush()
+    public static function flush()
     {
+		//写入日志，目录结构为log/年/月/log_日_时.txt
+		$y = date('Y');
+		$m = date('m');
+		$d = date('d');
+		$ldir = FREE_PATH . '/caches/logs/';
+		$ydir = FREE_PATH . '/caches/logs/' .$y;
+		$mdir = FREE_PATH . '/caches/logs/'.$m;
+		if(!is_dir($ldir))
+		{
+			mkdir($ldir, 0777,true);
+		}
+		if(!is_dir($ydir))
+		{
+			mkdir($ydir, 0777,true);
+		}
+		if(!is_dir($mdir))
+		{
+			mkdir($mdir, 0777,true);
+		}
+		$container = self::getContainer();
+		
+		foreach($container as $key => $logs)
+		{
+			$tempstr = date('Y-m-d H:i:s') . ': ';
+			foreach($logs as $log)
+			{
+				$tempstr .= "\r\n		" . $log;
+			}
+			$tempstr .= "\r\n";
+			$filepath = $mdir . '/' . 'log_' . $key . '-' .$d . '-' . date('H'). '.txt';
+			if(!file_exists($filepath))
+			{
+				touch($filepath);
+			} 
+			chmod($filepath, 0777);
+			error_log($tempstr, 3, $filepath);
+		}
         return true;
     }
     
-    public function get($key='error')
+    public static function get($key='error')
     {
-        return isset($this->container[$key]) ? $this->container[$key] : NULL;
+		$container = self::instance()->getContainer();
+        return isset($container[$key]) ? $container[$key] : NULL;
     }
-    /**
-     * 统计
-     */
-    public function tj()
-    {
-        $od = $this->get('tjdata');
-        $data = array();
-        if(is_array($od))
-        {
-            foreach($od as $key => $r)
-            {
-                $data += $r;
-            }
-        }
-    }
+    
 }
 
 ?>

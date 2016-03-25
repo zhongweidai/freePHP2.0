@@ -376,7 +376,7 @@ class FreeString {
 	/**
 	 * 格式化html
 	 * */
-	public static function compress_html($string) 
+	public static function compressHtml($string) 
 	{ 
 		$string = str_replace("\r\n", '', $string); //清除换行符 
 		$string = str_replace("\n", '', $string); //清除换行符 
@@ -398,5 +398,21 @@ class FreeString {
 		"" 
 		); 
 		return preg_replace($pattern, $replace, $string); 
+	}
+	
+	public static function ucfirst($string,$needle='_')
+	{
+		$re = '';
+		if(strpos($string,$needle) !== false)
+		{
+			$tmp = explode($needle,$string);
+			foreach($tmp as $t)
+			{
+				$t && $re .= ucfirst($t);
+			}
+		}else{
+			$re = ucfirst($string);
+		}
+		return $re;
 	}
 }

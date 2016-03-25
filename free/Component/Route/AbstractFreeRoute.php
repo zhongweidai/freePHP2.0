@@ -11,17 +11,17 @@ abstract class AbstractFreeRoute{
 	/**
 	 * 获取模型
 	 */
-	abstract public function route_m();
+	abstract public function routeM();
 
 	/**
 	 * 获取控制器
 	 */
-	abstract public function route_c();
+	abstract public function routeC();
 
 	/**
 	 * 获取事件
 	 */
-	abstract public function route_a();
+	abstract public function routeA();
 	/**
 	 * url拼凑
 	 */
