@@ -8,6 +8,7 @@ return array (
            'data'        =>  'Web\Tags\Twig\WebDataExtension',
 
         ),
+        'route' => 'index/index/init',
         //'filter'=>array('front_filter'=>'src/library/FrontFilter'),
         'assets_path' => 'assets',
     ),
@@ -19,17 +20,11 @@ return array (
                 'data'        =>  'Mall\Tags\Twig\WebDataExtension',
 
             ),
-
+            'route' => 'index/index/init',
             //'filter'=>array('front_filter'=>'src/library/FrontFilter'),
             'assets_path' => 'assets',
-			'db' => array(
-				'tablepre' => 't_', 
-				'database' => 'talent',
-			),
         ),
-	'Talent' => array(
-		
-	),
+
 
 );
 ?>

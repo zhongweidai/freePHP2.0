@@ -13,6 +13,8 @@ class FreeModel extends AbstractFreeModel{
 
 	public function __construct($container) {
         $this->_container = $container;
+		$this->dbTablepre =$this->_container->loadConfig('system','tablepre');
+		$this->tableName = $this->dbTablepre .$this->tableName;
 		$this->db =  $this->_container->getComponent('db',array('arguments'=>$this->_container));
 	}
 		
