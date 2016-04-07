@@ -98,7 +98,7 @@ abstract class AbstractFreeDb {
 	 *
 	 * @return int 
 	 */
-	abstract public function insertId($table_name);
+	abstract public function insertId();
 	
 	/**
 	 * 执行更新记录操作

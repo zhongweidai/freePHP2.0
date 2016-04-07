@@ -87,7 +87,7 @@ final class FreeMysqlDb extends AbstractFreeDb {
 	 * @return 查询资源句柄
 	 */
 	protected function execute($sql) 
-    {print_r($sql);
+    {
 		if(!is_resource($this->link)) {
 			$this->connect();
 		}
@@ -262,7 +262,7 @@ final class FreeMysqlDb extends AbstractFreeDb {
 	 * 获取最后一次添加记录的主键号
 	 * @return int 
 	 */
-	public function insertId($table) {
+	public function insertId() {
 		return mysql_insert_id($this->link);
 	}
 	
