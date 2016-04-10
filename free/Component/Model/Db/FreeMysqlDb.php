@@ -13,71 +13,48 @@ namespace Component\Model\Db;
  */
 
 final class FreeMysqlDb extends AbstractFreeDb {
-
-	/**
-	 * 数据库连接资源句柄
-	 */
-	public $link = null;
-	
-	/**
-	 * 最近一次查询资源句柄
-	 */
-	public $lastQueryId = null;
-	
-	/**
-	 *  统计数据库查询次数
-	 */
-	public $queryCount = 0;
-		
+    protected $charset = 'utf8';
     protected $comparison = array('eq'=>'=','neq'=>'<>','gt'=>'>','egt'=>'>=','lt'=>'<','elt'=>'<=','notlike'=>'NOT LIKE','like'=>'LIKE');
 	
 	
 	public function __construct($container) {
         $this->_container = $container;
-        $config = $this->_container->loadConfig('database','mysql');
-		$this->open($config);
-	}
-	
-	/**
-	 * 打开数据库连接,有可能不真实连接数据库
-	 *
-	 * @param $config	数据库连接参数
-	 * 			
-	 * @return void
-	 */
-	public function open($config) {
-		$this->config = $config;
-		if($config['autoconnect'] == 1) {
-			$this->connect();
-		}
-	}
+        $configs = $this->_container->loadConfig('database');
+        $this->deploy = isset($configs['DB_DEPLOY']) ? $configs['DB_DEPLOY'] : false;
+		$this->config = $configs['DB_SERVER'];
+        $this->debug = isset($configs['debug']) ? $configs['debug'] : false;
+        isset($configs['DB_CHARSET']) && $this->charset = $configs['DB_CHARSET'];
 
-	/**
-	 * 真正开启数据库连接
-	 * 			
-	 * @return void
-	 */
-	public function connect() {
-		$func = $this->config['pconnect'] == 1 ? 'mysql_pconnect' : 'mysql_connect';
-		if(!$this->link = $func($this->config['hostname'], $this->config['username'], $this->config['password'], 1)) {
-			$this->halt('Can not connect to MySQL server');
-			return false;
-		}
-
-		if($this->version() > '4.1') {
-			$charset = isset($this->config['charset']) ? $this->config['charset'] : '';
-			$serverset = $charset ? "character_set_connection='$charset',character_set_results='$charset',character_set_client=binary" : '';
-			$serverset .= $this->version() > '5.0.1' ? ((empty($serverset) ? '' : ',')." sql_mode='' ") : '';
-			$serverset && mysql_query("SET $serverset", $this->link);		
-		}
-
-		if($this->config['database'] && !@mysql_select_db($this->config['database'], $this->link)) {
-			$this->halt('Cannot use database '.$this->config['database']);
-			return false;
-		}
-		$this->database = $this->config['database'];
-		return $this->link;
+        $this->options = isset($configs['DB_PARAMS']) ? $configs['DB_PARAMS'] : array();
+        $this->dbName = isset($configs['DB_DEFAULT_NAME']) ? $configs['DB_DEFAULT_NAME'] : NULL;
 	}
+    /**
+     * 解析pdo连接的dsn信息
+     * @access public
+     * @param array $config 连接信息
+     * @return string
+     */
+    protected function parseDsn($config){
+        $dsn  =   'mysql:dbname='.$config['database'].';host='.$config['hostname'];
+        if(!empty($config['hostport'])) {
+            $dsn  .= ';port='.$config['hostport'];
+        }elseif(!empty($config['socket'])){
+            $dsn  .= ';unix_socket='.$config['socket'];
+        }
+
+        if(!empty($this->charset)){
+            if(version_compare(PHP_VERSION,'5.3.6','<')){
+                // PHP5.3.6以下不支持charset设置
+                $this->options[\PDO::MYSQL_ATTR_INIT_COMMAND]    =   'SET NAMES '.$this->charset ;
+            }else{
+                $dsn  .= ';charset='.$this->charset ;
+            }
+        }
+        return $dsn;
+    }
+
+
+
 
 	/**
 	 * 数据库查询执行方法
@@ -86,106 +63,34 @@ final class FreeMysqlDb extends AbstractFreeDb {
 	 *
 	 * @return 查询资源句柄
 	 */
-	protected function execute($sql) 
+	protected function execute($sql)
     {
-		if(!is_resource($this->link)) {
-			$this->connect();
-		}
-		
-		$this->lastQueryId = mysql_query($sql, $this->link) or $this->halt(mysql_error(), $sql);
+        $dbName = $this->getDbName();
+        $configs = $this->config;
+        //如果是select查询，则查从库
+        if ($this->deploy && strtolower(substr(ltrim($sql), 0, 6))=='select'){
+            $slave = true;
+            $key = 'DB_R:' . $dbName;
+        }else{
+            $slave = false;
+            $key = 'DB:' . $dbName;
+        }
+
+        if(array_key_exists($key,$configs))
+        {
+            $config = $configs[$key];
+        }else{
+            $key = $slave ? 'DB_R:' : 'DB:';
+            $config = $configs[$key];
+        }
+        $link = $this->connect($config,$key);
+
 
 		$this->queryCount++;
 		return $this->lastQueryId;
 	}
 
-	/**
-	 * 执行sql查询
-	 * @param $data 		需要查询的字段值[例`name`,`gender`,`birthday`]
-	 * @param $table 		数据表
-	 * @param $where 		查询条件[例`name`='$name']
-	 * @param $limit 		返回结果范围[例：10或10,10 默认为空]
-	 * @param $order 		排序方式	[默认按数据库默认方式排序]
-	 * @param $group 		分组方式	[默认为空]
-	 * @param $key 			返回数组按键名排序
-	 * @return array		查询结果集数组
-	 */
-	public function select($data, $table, $where = '', $limit = '', $order = '', $group = '', $key = '') {
 
-        $where = $this->parseWhere($where);
-        
-		$where && $where = ' WHERE ' . $where . ' ';
-		$order = $this->parseOrder($order);
-		$order && $order = ' ORDER BY ' . $order;
-		$group = $group == '' ? '' : ' GROUP BY '.$group;
-		if(empty($data))
-		{
-			$data = '*';
-		}
-		if (is_array($data))
-		{
-			array_walk($data, array($this, 'addSpecialChar'));
-			$data = implode(',', $data);
-		}
-/* 		else{
-			$field = explode(',', $data);
-			array_walk($field, array($this, 'addSpecialChar'));
-			$data = implode(',', $field);
-		} */
-        $limit && $limit = ' limit ' . $limit;
-		$sql = 'SELECT '.$data.' FROM `'.$this->config['database'].'`.`'.$table.'`'.$where.$group.$order.$limit;
-		$this->execute($sql);
-		if(!is_resource($this->lastQueryId)) {
-			return $this->lastQueryId;
-		}
-
-		$datalist = array();
-		while(($rs = $this->fetchNext()) != false) {
-			if($key) {
-				$datalist[$rs[$key]] = $rs;
-			} else {
-				$datalist[] = $rs;
-			}
-		}
-		$this->freeResult();
-		return $datalist;
-	}
-
-	/**
-	 * 获取单条记录查询
-	 * @param $data 		需要查询的字段值[例`name`,`gender`,`birthday`]
-	 * @param $table 		数据表
-	 * @param $where 		查询条件
-	 * @param $order 		排序方式	[默认按数据库默认方式排序]
-	 * @param $group 		分组方式	[默认为空]
-	 * @return array/null	数据查询结果集,如果不存在，则返回空
-	 */
-	public function getOne($data, $table, $where = '', $order = '', $group = '') {	
-		$where = $this->parseWhere($where);
-		$where && $where = ' WHERE ' . $where . ' ';
-		$order = $this->parseOrder($order);
-		$order && $order = ' ORDER BY ' . $order;
-		$group = $group == '' ? '' : ' GROUP BY '.$group;
-		$limit = ' LIMIT 1';
-        if(empty($data))
-		{
-			$data = '*';
-		}
-		if (is_array($data))
-		{
-			array_walk($data, array($this, 'addSpecialChar'));
-			$data = implode(',', $data);
-		}
-/* 		else{
-			$field = explode(',', $data);
-			array_walk($field, array($this, 'addSpecialChar'));
-			$data = implode(',', $field);
-		} */
-		$sql = 'SELECT '.$data.' FROM `'.$this->config['database'].'`.`'.$table.'`'.$where.$group.$order.$limit;
-        $this->execute($sql);
-		$res = $this->fetchNext();
-		$this->freeResult();
-		return $res;
-	}
 	
 	/**
 	 * 遍历查询结果集
@@ -232,81 +137,10 @@ final class FreeMysqlDb extends AbstractFreeDb {
 		return $datalist;
 	}
 	**/
-	/**
-	 * 执行添加记录操作
-	 * @param $data 		要增加的数据，参数为数组。数组key为字段值，数组值为数据取值
-	 * @param $table 		数据表
-	 * @return boolean
-	 */
-	public function insert($data, $table, $return_insertId = false, $replace = false) {
-		if(!is_array( $data ) || $table == '' || count($data) == 0) {
-			return false;
-		}
-		
-		$fielddata = array_keys($data);
-		$valuedata = array_values($data);
-		array_walk($fielddata, array($this, 'addSpecialChar'));
-		array_walk($valuedata, array($this, 'escapeString'));
-		
-		$field = implode (',', $fielddata);
-		$value = implode (',', $valuedata);
 
-		$cmd = $replace ? 'REPLACE INTO' : 'INSERT INTO';
-		$sql = $cmd.' `'.$this->config['database'].'`.`'.$table.'`('.$field.') VALUES ('.$value.')';
-		$return = $this->execute($sql);
-        $this->toLog($sql);
-		return $return_insertId ? $this->insertId() : $return;
-	}
 	
-	/**
-	 * 获取最后一次添加记录的主键号
-	 * @return int 
-	 */
-	public function insertId() {
-		return mysql_insert_id($this->link);
-	}
-	
-	/**
-	 * 执行更新记录操作
-	 * @param $data 		要更新的数据内容，参数可以为数组也可以为字符串，建议数组。
-	 * 						为数组时数组key为字段值，数组值为数据取值
-	 * 						为字符串时[例：`name`='phpcms',`hits`=`hits`+1]。
-	 *						为数组时[例: array('name'=>'phpcms','password'=>'123456')]
-	 *						数组可使用array('name'=>'+=1', 'base'=>'-=1');程序会自动解析为`name` = `name` + 1, `base` = `base` - 1
-	 * @param $table 		数据表
-	 * @param $where 		更新数据时的条件
-	 * @return boolean
-	 */
-	public function update($data, $table, $where = '') {
-        $where = $this->parseWhere($where);
-		if(empty($table) or empty($where) or empty($data)) {
-			return false;
-		}
-		
-		$where = ' WHERE '.$where;
-		$field = $this->parseSet($data);
-		$sql = 'UPDATE `'.$this->config['database'].'`.`'.$table.'` SET '.$field.$where;
-        $this->toLog($sql);
-		return $this->execute($sql);
-	}
-	
-	/**
-	 * 执行删除记录操作
-	 * @param $table 		数据表
-	 * @param $where 		删除数据条件,不充许为空。
-	 * 						如果要清空表，使用empty方法
-	 * @return boolean
-	 */
-	public function delete($table, $where) {
-        if ($table == '' || $where == '') {
-			return false;
-		}
-        $where = $this->parseWhere($where);
-        $where && $where = ' WHERE ' . $where . ' ';
-		$sql = 'DELETE FROM `'.$this->config['database'].'`.`'.$table.'`'.$where;
-		$this->toLog($sql);
-		return $this->execute($sql);
-	}
+
+
 	
 	/**
 	 * 获取最后数据库操作影响到的条数
@@ -403,27 +237,6 @@ final class FreeMysqlDb extends AbstractFreeDb {
 		return @mysql_result($this->lastQueryId, $row);
 	}
 
-	public function error() {
-		return @mysql_error($this->link);
-	}
-
-	public function errno() {
-		return intval(@mysql_errno($this->link)) ;
-	}
-
-	public function version() {
-		if(!is_resource($this->link)) {
-			$this->connect();
-		}
-		return mysql_get_server_info($this->link);
-	}
-
-	public function close() {
-		if (is_resource($this->link)) {
-			@mysql_close($this->link);
-		}
-	}
-	
 	public function halt($message = '', $sql = '') {
 		$this->errormsg = "<b>MySQL Query : </b> $sql <br /><b> MySQL Error : </b>".$this->error()." <br /> <b>MySQL Errno : </b>".$this->errno()." <br /><b> Message : </b> $message <br />";
 		$msg = $this->errormsg;

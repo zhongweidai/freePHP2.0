@@ -2,9 +2,7 @@
 
 namespace Mall\Model;
 
-use Component\Model\FreeModel;
-
-class TransportModel extends FreeModel 
+class TransportModel extends MallModel
 {
 	protected $tableName = 'transport';
 	protected $pkId = 'id';

@@ -1,8 +1,6 @@
 <?php
 namespace Mall\Model;
-use Component\Model\FreeModel;
-
-class AttributeModel extends FreeModel
+class AttributeModel extends MallModel
 {
     protected $tableName = 'attribute';
     protected $pkId = 'attr_id';

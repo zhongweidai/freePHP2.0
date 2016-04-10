@@ -1,8 +1,7 @@
 <?php
 namespace Mall\Model;
-use Component\Model\FreeModel;
 
-class GoodsAttrIndexModel extends FreeModel
+class GoodsAttrIndexModel extends MallModel
 {
     protected $tableName = 'goods_attr_index';
     

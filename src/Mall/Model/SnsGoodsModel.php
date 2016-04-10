@@ -2,9 +2,7 @@
 
 namespace Mall\Model;
 
-use Component\Model\FreeModel;
-
-class SnsGoodsModel extends FreeModel 
+class SnsGoodsModel extends MallModel
 {
 	protected $tableName = 'sns_goods';
 	

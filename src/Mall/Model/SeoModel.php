@@ -1,8 +1,7 @@
 <?php
 namespace Mall\Model;
-use Component\Model\FreeModel;
 
-class SeoModel extends FreeModel
+class SeoModel extends MallModel
 {
     protected $tableName='seo';
     protected $pkId = 'id';

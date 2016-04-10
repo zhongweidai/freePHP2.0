@@ -1,8 +1,6 @@
 <?php
 namespace Mall\Model;
-use Component\Model\FreeModel;
-
-class AreaModel extends FreeModel
+class AreaModel extends MallModel
 {
     protected $tableName = 'area';
     protected $pkId = 'area_id';

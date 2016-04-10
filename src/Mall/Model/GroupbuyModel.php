@@ -8,10 +8,7 @@
 
 namespace Mall\Model;
 
-
-use Component\Model\FreeModel;
-
-class GroupbuyModel extends FreeModel
+class GroupbuyModel extends MallModel
 {
     protected $tableName = 'groupbuy';
     protected $pkId = 'groupbuy_id';

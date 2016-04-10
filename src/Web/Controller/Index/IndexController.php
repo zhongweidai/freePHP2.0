@@ -17,7 +17,7 @@ class IndexController extends FreeController
 {
     public function initAction()
     {
-       // echo 'action';
+       echo 'action';
         $model = $this->getModel('user');
         var_dump($model->select());
         //$model = $this->getModel('users');

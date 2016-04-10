@@ -8,10 +8,7 @@
 
 namespace Mall\Model;
 
-
-use Component\Model\FreeModel;
-
-class PXianshiGoodsModel extends FreeModel {
+class PXianshiGoodsModel extends MallModel {
     protected $tableName = 'p_xianshi_goods';
     protected $pkId = 'xianshi_goods_id';
 

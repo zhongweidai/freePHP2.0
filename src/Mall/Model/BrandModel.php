@@ -1,8 +1,7 @@
 <?php
 namespace Mall\Model;
-use Component\Model\FreeModel;
 
-class BrandModel extends FreeModel
+class BrandModel extends MallModel
 {
     protected $tableName = 'brand';
     protected $pkId = 'brand_id';

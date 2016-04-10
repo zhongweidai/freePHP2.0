@@ -2,9 +2,7 @@
 
 namespace Mall\Model;
 
-use Component\Model\FreeModel;
-
-class TransportExtendModel extends FreeModel {
+class TransportExtendModel extends MallModel {
 }
 
 ?>

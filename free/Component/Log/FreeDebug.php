@@ -116,7 +116,7 @@ class FreeDebug {
 			$line = isset($info['line']) ? $info['line'] : '';
 			$str = '[' . date("Y-m-d H:i:m") . '] ' . $file . ' (line:' . $line . ') ';
 			$str .= $info['class'] . $info['type'] . $info['function'] . '(';
-			$str .= implode(', ', $info['args']);
+			$str .= @implode(', ', $info['args']);
 			$str .= ")";
 			$traceInfo[] = $str;
 		}
@@ -152,9 +152,9 @@ class FreeDebug {
 
 	private static function traceArgs($args = array()) {
 		foreach ($args as $key => $arg) {
-			if (is_array($arg))
-				$args[$key] = 'array(' . implode(',', $arg) . ')';
-			elseif (is_object($arg))
+			if (is_array($arg) && $arg) {
+                $args[$key] = 'array(' . @implode(',', $arg) . ')';
+            }elseif (is_object($arg))
 				$args[$key] = 'class ' . get_class($arg);
 			else
 				$args[$key] = $arg;

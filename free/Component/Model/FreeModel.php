@@ -16,6 +16,7 @@ class FreeModel extends AbstractFreeModel{
 		$this->dbTablepre =$this->_container->loadConfig('system','tablepre');
 		$this->tableName = $this->dbTablepre .$this->tableName;
 		$this->db =  $this->_container->getComponent('db',array('arguments'=>$this->_container));
+
 	}
 		
 	/**
@@ -30,6 +31,7 @@ class FreeModel extends AbstractFreeModel{
 	 */
 	final public function select($where = array(), $data = array(), $limit = '', $order = '', $group = '', $key='') {
         empty($key) && $key = $this->pkId;
+        $this->db->setDbName($this->getDbName());
 	    return $this->db->select($data, $this->tableName, $where, $limit, $order, $group, $key);
 	}
 	/**
@@ -64,6 +66,7 @@ class FreeModel extends AbstractFreeModel{
 	 * @return array/null	数据查询结果集,如果不存在，则返回空
 	 */
 	final public function getOne($where = array(), $data = array(), $order = '', $group = '') {
+        $this->db->setDbName($this->getDbName());
 		return $this->db->getOne($data, $this->tableName, $where, $order, $group);
 	}
 	/**
@@ -72,6 +75,7 @@ class FreeModel extends AbstractFreeModel{
 	 * @return	boolean/query resource		如果为查询语句，返回资源句柄，否则返回true/false
 	 */
 	final public function query($sql,$key='') {
+        $this->db->setDbName($this->getDbName());
 		return $this->db->query($sql,$key);
 	}
 	
@@ -86,6 +90,7 @@ class FreeModel extends AbstractFreeModel{
 		if($this->validation($data,1))
 		{
 			$this->deal($data,1);
+            $this->db->setDbName($this->getDbName());
 			return $this->db->insert($data, $this->tableName, $return_insert_id, $replace);
 		}else{
 			return false;
@@ -97,6 +102,7 @@ class FreeModel extends AbstractFreeModel{
 	 * @return int 
 	 */
 	final public function insertId() {
+        $this->db->setDbName($this->getDbName());
 		return $this->db->insertId();
 	}
 	
@@ -115,6 +121,7 @@ class FreeModel extends AbstractFreeModel{
 		if($this->validation($data,2))
 		{
 			$this->deal($data,2);
+            $this->db->setDbName($this->getDbName());
 			return $this->db->update($data, $this->tableName, $where);
 		}else{
 			return false;
@@ -128,6 +135,7 @@ class FreeModel extends AbstractFreeModel{
 	 * @return boolean
 	 */
 	final public function delete($where=array()) {
+        $this->db->setDbName($this->getDbName());
 		return $this->db->delete($this->tableName, $where);
 	}
 	
@@ -142,6 +150,7 @@ class FreeModel extends AbstractFreeModel{
 	    }else{
 	        $field = "$field, COUNT(*) AS TNUM";
 	    }
+        $this->db->setDbName($this->getDbName());
 		$r = $this->getOne($where, $field);
 		return $r['TNUM'];
 	}
@@ -151,6 +160,7 @@ class FreeModel extends AbstractFreeModel{
 	 * @return int
 	 */
 	final public function affectedRows() {
+        $this->db->setDbName($this->getDbName());
 		return $this->db->affectedRows();
 	}
 	
@@ -159,6 +169,7 @@ class FreeModel extends AbstractFreeModel{
 	 * @return array
 	 */
 	public function getPrimary() {
+        $this->db->setDbName($this->getDbName());
 		return $this->db->getPrimary($this->tableName);
 	}
 	
@@ -173,6 +184,7 @@ class FreeModel extends AbstractFreeModel{
 		} else {
 			$tableName = $this->dbTablepre.$tableName;
 		}
+        $this->db->setDbName($this->getDbName());
 		return $this->db->getFields($tableName);
 	}
 	
@@ -182,6 +194,7 @@ class FreeModel extends AbstractFreeModel{
 	 * @return boolean
 	 */
 	final public function tableExists($table){
+        $this->db->setDbName($this->getDbName());
 		return $this->db->tableExists($this->dbTablepre.$table);
 	}
 	
@@ -193,10 +206,12 @@ class FreeModel extends AbstractFreeModel{
 	public function fieldExists($field) {
 		//$fields = $this->db->get_fields($this->tableName);
 		//return array_key_exists($field, $fields);
+        $this->db->setDbName($this->getDbName());
 		return $this->db->fieldExists($this->tableName, $field);
 	}
 	
 	final public function listTables() {
+        $this->db->setDbName($this->getDbName());
 		return $this->db->listTables();
 	}
 	/**
@@ -206,18 +221,20 @@ class FreeModel extends AbstractFreeModel{
 	 */
 	final public function fetchArray() {
 		$data = array();
+        $this->db->setDbName($this->getDbName());
 		while($r = $this->db->fetchNext()) {
 			$data[] = $r;		
 		}
 		return $data;
 	}
-	
-	/**
-	 * 返回数据库版本号
-	 */
-	final public function version() {
-		return $this->db->version();
-	}
+//
+//	/**
+// * 返回数据库版本号
+// */
+//    final public function version() {
+//        $this->db->setDbName($this->getDbName());
+//        return $this->db->version();
+//    }
 	/**
 	 * 执行更新记录操作
 	 * 对clob字段更新操作
@@ -227,6 +244,7 @@ class FreeModel extends AbstractFreeModel{
 	 */
 	final public function updateA($column,$val,$table, $where = '') 
 	{
+        $this->db->setDbName($this->getDbName());
 		return $this->db->updateA($column,$val,$table, $where);
 	}
 }

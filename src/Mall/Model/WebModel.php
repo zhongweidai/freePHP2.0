@@ -8,10 +8,7 @@
 
 namespace Mall\Model;
 
-
-use Component\Model\FreeModel;
-
-class WebModel extends FreeModel {
+class WebModel extends MallModel {
     protected $tableName = 'web';
     protected $pkId = 'web_id';
 } 

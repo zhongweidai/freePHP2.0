@@ -1,5 +1,8 @@
 <?php
 namespace Component\Model\Db;
+use Free\Libs\FreeException;
+use Component\Log\FreeDebug;
+
 /**
  * 数据库基础类
  * 
@@ -15,11 +18,16 @@ namespace Component\Model\Db;
 abstract class AbstractFreeDb {
 
     protected $_container;
-	
+    protected $charset = 'utf8';
+    protected $debug = false;
 	/**
 	 * 数据库配置信息
 	 */
     protected $config = null;
+
+    protected $options = array();
+
+    protected $linkID = array();
 	
 	/**
 	 * 数据库连接资源句柄
@@ -27,53 +35,333 @@ abstract class AbstractFreeDb {
 	public $link = null;
 	
 	/**
-	 * 最近一次查询资源句柄
+	 * 最近一次sql
 	 */
-	public $lastQueryId = null;
-	
+	public $lastSql = null;
+    /**
+     * 是否为多机模式
+     */
+    protected $deploy = false;
 	/**
 	 *  统计数据库查询次数
 	 */
 	public $queryCount = 0;
+
+    protected $numRows = 0;//影响行数
 	
+    protected $dbName = NULL;
+
+    protected $binds = array();//参数绑定
+
+    protected $lastInsID = NULL;//上一次插入ID
+
+    protected $PDOStatement = NULL;
+
+    protected $transTimes = 0;//事物次数
+    protected $startTrans = 0;
+
+    protected $bind = array();
+    /**
+     * 连接数据库方法
+     * @access public
+     */
+    public function connect($config,$key=0)
+    {
+        if ( !isset($this->linkID[$key]) )
+        {
+            try{
+                if(empty($config['dsn']))
+                {
+                    $config['dsn']  =   $this->parseDsn($config);
+                }
+                if(version_compare(PHP_VERSION,'5.3.6','<='))
+                {
+                    // 禁用模拟预处理语句
+                    $this->options[\PDO::ATTR_EMULATE_PREPARES]  =   false;
+                }
+                $this->linkID[$key] = new \PDO( $config['dsn'], $config['username'], $config['password'],$this->options);
+            }catch (\PDOException $e) {
+                throw new FreeException($e->getMessage());
+            }
+        }
+        $this->link = $this->linkID[$key];
+        return $this->link ;
+    }
+
+    public function query($sql)
+    {
+        $dbName = $this->getDbName();
+        $configs = $this->config;
+        //如果是select查询，则查从库
+        if ($this->deploy){
+            $slave = true;
+            $key = 'DB_R:' . $dbName;
+        }else{
+            $slave = false;
+            $key = 'DB:' . $dbName;
+        }
+        if(array_key_exists($key,$configs))
+        {
+            $config = $configs[$key];
+        }else{
+            $key = $slave ? 'DB_R:' : 'DB:';
+            $config = $configs[$key];
+        }
+        $link = $this->connect($config,$key);
+
+        if ( !$link )
+        {
+            return false;
+        }
+
+        //释放前次的查询结果
+        if ( !empty($this->PDOStatement) )
+        {
+            $this->free();
+        }
+        $this->queryCount++;
+        // 记录开始执行时间
+        //$this->debug(true);
+        $this->lastSql = $sql;
+        $this->PDOStatement =   $this->link->prepare($sql);
+        if(false === $this->PDOStatement)
+        {
+            throw new FreeException($this->error());
+        }
+        foreach ($this->bind as $key => $val)
+        {
+            if(is_array($val))
+            {
+                $this->PDOStatement->bindValue($key, $val[0], $val[1]);
+            }else{
+                $this->PDOStatement->bindValue($key, $val);
+            }
+        }
+        $this->bind =   array();
+        $result =   $this->PDOStatement->execute();
+        var_dump($result);
+        // $this->debug(false);
+        if ( false === $result) {
+            $this->error();
+            return false;
+        } else {
+            return $this->getResult();
+        }
+    }
+
+    /**
+     * 数据库查询执行方法
+     *
+     * @param $sql 要执行的sql语句
+     *
+     * @return 查询资源句柄
+     */
+    protected function execute($sql)
+    {
+        $dbName = $this->getDbName();
+        $configs = $this->config;
+
+        $slave = false;
+        $key = 'DB:' . $dbName;
+
+        if(array_key_exists($key,$configs))
+        {
+            $config = $configs[$key];
+        }else{
+            $key = $slave ? 'DB_R:' : 'DB:';
+            $config = $configs[$key];
+        }
+        $this->connect($config,$key);
+        if ( !$this->link )
+        {
+            return false;
+        }
+        if($this->startTrans)
+        {
+            //数据rollback 支持
+            if ($this->transTimes == 0)
+            {
+                $this->link->beginTransaction();
+            }
+            $this->transTimes++;
+        }
+
+        //释放前次的查询结果
+        if ( !empty($this->PDOStatement) )
+        {
+            $this->free();
+        }
+        // 记录开始执行时间
+        //$this->debug(true);
+        $this->lastSql = $sql;
+        $this->PDOStatement =   $this->link->prepare($sql);
+        if(false === $this->PDOStatement)
+        {
+            throw new FreeException($this->error());
+        }
+        foreach ($this->bind as $key => $val)
+        {
+            if(is_array($val))
+            {
+                $this->PDOStatement->bindValue($key, $val[0], $val[1]);
+            }else{
+                $this->PDOStatement->bindValue($key, $val);
+            }
+        }
+        $this->bind =   array();
+        $result =   $this->PDOStatement->execute();
+       // $this->debug(false);
+        if ( false === $result)
+        {
+            $this->error();
+            return false;
+        } else {
+            $this->numRows = $this->PDOStatement->rowCount();
+            if(preg_match("/^\s*(INSERT\s+INTO|REPLACE\s+INTO)\s+/i", $str))
+            {
+                $this->lastInsID = $this->link->lastInsertId();
+            }
+            return $this->numRows;
+        }
+
+    }
+
+    /**
+     * 启动事务
+     * @access public
+     * @return void
+     */
+    public function startTrans() {
+        $this->startTrans = true;
+    }
+    /**
+     * 用于非自动提交状态下面的查询提交
+     * @access public
+     * @return boolean
+     */
+    public function commit() {
+        if ($this->transTimes > 0) {
+            $result = $this->link->commit();
+            $this->transTimes = 0;
+            $this->startTrans = false;
+            if(!$result){
+                $this->error();
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 事务回滚
+     * @access public
+     * @return boolean
+     */
+    public function rollback() {
+        if ($this->transTimes > 0) {
+            $result = $this->link->rollback();
+            $this->transTimes = 0;
+            $this->startTrans = false;
+            if(!$result){
+                $this->error();
+                return false;
+            }
+        }
+        return true;
+    }
+    /**
+     * 释放查询结果
+     * @access public
+     */
+    public function free()
+    {
+        $this->PDOStatement = null;
+    }
 
 
-	/**
-	 * 执行sql查询
-	 *
-	 * @param $data 		需要查询的字段值[例`name`,`gender`,`birthday`]
-	 * @param $table 		数据表
-	 * @param $where 		查询条件[例`name`='$name']
-	 * @param $limit 		返回结果范围[例：10或10,10 默认为空]
-	 * @param $order 		排序方式	[默认按数据库默认方式排序]
-	 * @param $group 		分组方式	[默认为空]
-	 * @param $key 			返回数组按键名排序
-	 *
-	 * @return array		查询结果集数组
-	 */
-	abstract public function select($data, $table, $where = '', $limit = '', $order = '', $group = '', $key = '');
+    abstract protected function parseDsn($config);
 
-	/**
-	 * 获取单条记录查询
-	 *
-	 * @param $data 		需要查询的字段值[例`name`,`gender`,`birthday`]
-	 * @param $table 		数据表
-	 * @param $where 		查询条件
-	 * @param $order 		排序方式	[默认按数据库默认方式排序]
-	 * @param $group 		分组方式	[默认为空]
-	 *
-	 * @return array/null	数据查询结果集,如果不存在，则返回空
-	 */
-	abstract public function getOne($data, $table, $where = '', $order = '', $group = '');
-	
-	/**
-	 * 遍历查询结果集
-	 *
-	 * @param $type		返回结果集类型	MYSQL_ASSOC，MYSQL_NUM 和 MYSQL_BOTH
-	 *
-	 * @return array
-	 */
-	abstract public function fetchNext($type='');
+    /**
+     * 执行sql查询
+     * @param $data 		需要查询的字段值[例`name`,`gender`,`birthday`]
+     * @param $table 		数据表
+     * @param $where 		查询条件[例`name`='$name']
+     * @param $limit 		返回结果范围[例：10或10,10 默认为空]
+     * @param $order 		排序方式	[默认按数据库默认方式排序]
+     * @param $group 		分组方式	[默认为空]
+     * @param $key 			返回数组按键名排序
+     * @return array		查询结果集数组
+     */
+    public function select($data, $table, $where = '', $limit = '', $order = '', $group = '', $key = '') {
+        $dbName = $this->getDbName();
+        $where = $this->parseWhere($where);
+
+        $where && $where = ' WHERE ' . $where . ' ';
+        $order = $this->parseOrder($order);
+        $order && $order = ' ORDER BY ' . $order;
+        $group = $group == '' ? '' : ' GROUP BY '.$group;
+        if(empty($data))
+        {
+            $data = '*';
+        }
+        if (is_array($data))
+        {
+            array_walk($data, array($this, 'addSpecialChar'));
+            $data = implode(',', $data);
+        }
+        $limit && $limit = ' limit ' . $limit;
+        $sql = 'SELECT '.$data.' FROM `'.$dbName.'`.`'.$table.'`'.$where.$group.$order.$limit;
+        var_dump($sql);
+        if($key)
+        {
+            $data= $this->query($sql);
+            if(!$data)
+            {
+                return $data;
+            }
+            $return = array();
+            foreach($data as $d)
+            {
+                $return[$d[$key]] = $d;
+            }
+            return $return;
+        }else{
+            return $this->query($sql);
+        }
+
+    }
+
+    /**
+     * 获取单条记录查询
+     * @param $data 		需要查询的字段值[例`name`,`gender`,`birthday`]
+     * @param $table 		数据表
+     * @param $where 		查询条件
+     * @param $order 		排序方式	[默认按数据库默认方式排序]
+     * @param $group 		分组方式	[默认为空]
+     * @return array/null	数据查询结果集,如果不存在，则返回空
+     */
+    public function getOne($data, $table, $where = '', $order = '', $group = '')
+    {
+        $dbName = $this->getDbName();
+        $where = $this->parseWhere($where);
+        $where && $where = ' WHERE ' . $where . ' ';
+        $order = $this->parseOrder($order);
+        $order && $order = ' ORDER BY ' . $order;
+        $group = $group == '' ? '' : ' GROUP BY '.$group;
+        $limit = ' LIMIT 1';
+        if(empty($data))
+        {
+            $data = '*';
+        }
+        if (is_array($data))
+        {
+            array_walk($data, array($this, 'addSpecialChar'));
+            $data = implode(',', $data);
+        }
+
+        $sql = 'SELECT '.$data.' FROM `'.$dbName.'`.`'.$table.'`'.$where.$group.$order.$limit;
+        return $this->query($sql);
+    }
 	
 	/**
 	 * 释放查询资源
@@ -81,67 +369,128 @@ abstract class AbstractFreeDb {
 	 * @return void
 	 */
 	abstract public function freeResult();
-	
-	
-	/**
-	 * 执行添加记录操作
-	 *
-	 * @param $data 		要增加的数据，参数为数组。数组key为字段值，数组值为数据取值
-	 * @param $table 		数据表
-	 *
-	 * @return boolean
-	 */
-	abstract public function insert($data, $table, $return_insert_id = false, $replace = false);
-	
-	/**
-	 * 获取最后一次添加记录的主键号
-	 *
-	 * @return int 
-	 */
-	abstract public function insertId();
-	
-	/**
-	 * 执行更新记录操作
-	 *
-	 * @param $data 		要更新的数据内容，参数可以为数组也可以为字符串，建议数组。
-	 * 						为数组时数组key为字段值，数组值为数据取值
-	 * 						为字符串时[例：`name`='phpcms',`hits`=`hits`+1]。
-	 *						为数组时[例: array('name'=>'phpcms','password'=>'123456')]
-	 *						数组可使用array('name'=>'+=1', 'base'=>'-=1');程序会自动解析为`name` = `name` + 1, `base` = `base` - 1
-	 * @param $table 		数据表
-	 * @param $where 		更新数据时的条件
-	 *
-	 * @return boolean
-	 */
-	abstract public function update($data, $table, $where = '');
-	
-	/**
-	 * 执行删除记录操作
-	 *
-	 * @param $table 		数据表
-	 * @param $where 		删除数据条件,不充许为空。
-	 * 						如果要清空表，使用empty方法
-	 *
-	 * @return boolean
-	 */
-	abstract public function delete($table, $where);
-	
-	/**
-     * 关闭连接
-     */
-	abstract public function close();
-	
-	/**
-     * 错误信息
-     */
-	abstract public function error();
-	
-    /**
-     * 错误编号
-     */
-	abstract public function errno();
 
-	/**
+
+    /**
+     * 执行添加记录操作
+     * @param $data 		要增加的数据，参数为数组。数组key为字段值，数组值为数据取值
+     * @param $table 		数据表
+     * @return boolean
+     */
+    public function insert($data, $table, $return_insertId = false, $replace = false) {
+        if(!is_array( $data ) || $table == '' || count($data) == 0) {
+            return false;
+        }
+        $dbName = $this->getDbName();
+        $fielddata = array_keys($data);
+        $valuedata = array_values($data);
+        array_walk($fielddata, array($this, 'addSpecialChar'));
+        array_walk($valuedata, array($this, 'escapeString'));
+
+        $field = implode (',', $fielddata);
+        $value = implode (',', $valuedata);
+
+        $cmd = $replace ? 'REPLACE INTO' : 'INSERT INTO';
+        $sql = $cmd.' `'.$dbName.'`.`'.$table.'`('.$field.') VALUES ('.$value.')';
+        $return = $this->execute($sql);
+        $this->toLog($sql);
+        return $return_insertId ? $this->insertId() : $return;
+    }
+
+    /**
+     * 获取最后一次添加记录的主键号
+     * @return int
+     */
+    public function insertId()
+    {
+        return $this->lastInsID;
+    }
+
+
+    /**
+     * 执行更新记录操作
+     * @param $data 		要更新的数据内容，参数可以为数组也可以为字符串，建议数组。
+     * 						为数组时数组key为字段值，数组值为数据取值
+     * 						为字符串时[例：`name`='cm',`hits`=`hits`+1]。
+     *						为数组时[例: array('name'=>'phpcms','password'=>'123456')]
+     *						数组可使用array('name'=>'+=1', 'base'=>'-=1');程序会自动解析为`name` = `name` + 1, `base` = `base` - 1
+     * @param $table 		数据表
+     * @param $where 		更新数据时的条件
+     * @return boolean
+     */
+    public function update($data, $table, $where = '')
+    {
+        $where = $this->parseWhere($where);
+        if(empty($table) or empty($where) or empty($data)) {
+            return false;
+        }
+        $dbName = $this->getDbName();
+        $where = ' WHERE '.$where;
+        $field = $this->parseSet($data);
+        $sql = 'UPDATE `'.$dbName.'`.`'.$table.'` SET '.$field.$where;
+        $this->toLog($sql);
+        return $this->execute($sql);
+    }
+
+
+    /**
+     * 执行删除记录操作
+     * @param $table 		数据表
+     * @param $where 		删除数据条件,不充许为空。
+     * 						如果要清空表，使用empty方法
+     * @return boolean
+     */
+    public function delete($table, $where) {
+        if ($table == '' || $where == '') {
+            return false;
+        }
+        $dbName = $this->getDbName();
+        $where = $this->parseWhere($where);
+        $where && $where = ' WHERE ' . $where . ' ';
+        $sql = 'DELETE FROM `'.$dbName.'`.`'.$table.'`'.$where;
+        $this->toLog($sql);
+        return $this->execute($sql);
+    }
+
+
+    /**
+     * 关闭数据库
+     * @access public
+     */
+    public function close() {
+        $this->link = null;
+    }
+
+    /**
+     * 数据库错误信息
+     * 并显示当前的SQL语句
+     * @access public
+     * @return string
+     */
+    public function error() {
+        $error = array();
+        if($this->PDOStatement) {
+            $error = $this->PDOStatement->errorInfo();
+            $this->error = $error[1].':'.$error[2];
+        }else{
+            $this->error = '';
+        }
+        if('' != $this->lastSql){
+            $this->error .= "\n [ SQL语句 ] : ".$this->lastSql;
+        }
+
+        // 记录错误日志
+        FreeDebug::trace(debug_backtrace());
+        if($this->debug) {// 开启数据库调试模式
+            throw new FreeException($this->error);
+        }else{
+            return $this->error;
+        }
+    }
+
+
+
+    /**
 	 * 对字段两边加反引号，以保证数据库安全
 	 * @param $value 数组值
 	 */
@@ -430,29 +779,26 @@ abstract class AbstractFreeDb {
             return $this->getComponent('log_container')->put($sql,'db_sql'); 
         } 
      }
-	 
-	 /**
-	 * 直接执行sql查询
-	 * @param $sql							查询sql语句
-	 * @return	boolean/array	如果为查询语句，返回数组
-	 */
-	 public function query($sql,$key='')
-	 {
-		$this->execute($sql);
-		if(!is_resource($this->lastQueryId)) {
-			return $this->lastQueryId;
-		}
 
-		$datalist = array();
-		while(($rs = $this->fetchNext()) != false) {
-			if($key) {
-				$datalist[$rs[$key]] = $rs;
-			} else {
-				$datalist[] = $rs;
-			}
-		}
-		$this->freeResult();
-		return $datalist;
-	 }
-     
+    /**
+     * 获得所有的查询数据
+     * @access private
+     * @return array
+     */
+    private function getResult() {
+        //返回数据集
+        $result =   $this->PDOStatement->fetchAll(\PDO::FETCH_ASSOC);
+        $this->numRows = count( $result );
+        return $result;
+    }
+
+    public function setDbName($dbName)
+    {
+        $this->dbName = $dbName;
+    }
+
+    public function getDbName()
+    {
+        return $this->dbName;
+    }
 }

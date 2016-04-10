@@ -1,8 +1,7 @@
 <?php
 namespace Mall\Model;
-use Component\Model\FreeModel;
 
-class PBoothQuotaModel extends FreeModel
+class PBoothQuotaModel extends MallModel
 {
     protected $tableName = 'p_booth_quota';
     

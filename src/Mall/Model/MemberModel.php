@@ -7,10 +7,7 @@
 
 namespace Mall\Model;
 
-use Component\Model\FreeModel;
-
-
-class MemberModel  extends FreeModel
+class MemberModel extends MallModel
 {
     /**
      * @var $table_name 数据库表名

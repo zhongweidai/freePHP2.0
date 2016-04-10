@@ -41,12 +41,18 @@ Abstract class AbstractFreeModel{
     protected $comparison = array('eq'=>'=','neq'=>'<>','gt'=>'>','egt'=>'>=','lt'=>'<','elt'=>'<=','notlike'=>'NOT LIKE','like'=>'LIKE');
 	
 	abstract public function select($where = array(), $data = array() , $limit = array(), $order = array(), $group = '', $key='');
+
+    protected $dbName = NULL;
 	
 	public function getTableName()
 	{
 		return $this->tableName;
 	}
-	
+
+    public function getDbName()
+    {
+        return $this->dbName;
+    }
 	public function getDb()
 	{
 	    return $this->db;

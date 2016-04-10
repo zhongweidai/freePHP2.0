@@ -14,11 +14,11 @@ class IndexController extends BaseController
 {
     public function initAction()
     {
+
         $model_groupbuy = $this->getGroupbuySevice();
+
         $group_list = $model_groupbuy->getGroupbuyCommendedList();
         $this->assign('group_list', $group_list);
-        
-        //var_dump($group_list);exit;
 
         //限时折扣
         $model_xianshi_goods = $this->getXianshiGoodsSevice();

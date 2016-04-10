@@ -2,9 +2,7 @@
 
 namespace Mall\Model;
 
-use Component\Model\FreeModel;
-
-class StoreGoodsClassModel extends FreeModel 
+class StoreGoodsClassModel extends MallModel
 {
 	protected $tableName = 'store_goods_class';
 	protected $pkId = 'stc_id';
