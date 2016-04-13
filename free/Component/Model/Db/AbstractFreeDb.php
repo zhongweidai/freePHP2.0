@@ -88,8 +88,21 @@ abstract class AbstractFreeDb {
         return $this->link ;
     }
 
+    public function getCurrentLink()
+    {
+        if(!$this->link)
+        {
+            $configs = $this->config;
+            $key =  'DB:';
+            $config = $configs[$key];
+            $config['database'] = $this->getDbName();
+            $this->connect($config,$key);
+        }
+        return $this->link;
+    }
     public function query($sql)
     {
+        var_dump($sql);
         $dbName = $this->getDbName();
         $configs = $this->config;
         //如果是select查询，则查从库
@@ -107,6 +120,7 @@ abstract class AbstractFreeDb {
             $key = $slave ? 'DB_R:' : 'DB:';
             $config = $configs[$key];
         }
+        $config['database'] = $dbName;
         $link = $this->connect($config,$key);
 
         if ( !$link )
@@ -139,7 +153,6 @@ abstract class AbstractFreeDb {
         }
         $this->bind =   array();
         $result =   $this->PDOStatement->execute();
-        var_dump($result);
         // $this->debug(false);
         if ( false === $result) {
             $this->error();
@@ -171,6 +184,7 @@ abstract class AbstractFreeDb {
             $key = $slave ? 'DB_R:' : 'DB:';
             $config = $configs[$key];
         }
+        $config['database'] = $dbName;
         $this->connect($config,$key);
         if ( !$this->link )
         {
@@ -210,6 +224,7 @@ abstract class AbstractFreeDb {
         }
         $this->bind =   array();
         $result =   $this->PDOStatement->execute();
+
        // $this->debug(false);
         if ( false === $result)
         {
@@ -217,7 +232,7 @@ abstract class AbstractFreeDb {
             return false;
         } else {
             $this->numRows = $this->PDOStatement->rowCount();
-            if(preg_match("/^\s*(INSERT\s+INTO|REPLACE\s+INTO)\s+/i", $str))
+            if(preg_match("/^\s*(INSERT\s+INTO|REPLACE\s+INTO)\s+/i", $sql))
             {
                 $this->lastInsID = $this->link->lastInsertId();
             }
@@ -295,7 +310,6 @@ abstract class AbstractFreeDb {
     public function select($data, $table, $where = '', $limit = '', $order = '', $group = '', $key = '') {
         $dbName = $this->getDbName();
         $where = $this->parseWhere($where);
-
         $where && $where = ' WHERE ' . $where . ' ';
         $order = $this->parseOrder($order);
         $order && $order = ' ORDER BY ' . $order;
@@ -311,7 +325,6 @@ abstract class AbstractFreeDb {
         }
         $limit && $limit = ' limit ' . $limit;
         $sql = 'SELECT '.$data.' FROM `'.$dbName.'`.`'.$table.'`'.$where.$group.$order.$limit;
-        var_dump($sql);
         if($key)
         {
             $data= $this->query($sql);
@@ -360,15 +373,26 @@ abstract class AbstractFreeDb {
         }
 
         $sql = 'SELECT '.$data.' FROM `'.$dbName.'`.`'.$table.'`'.$where.$group.$order.$limit;
-        return $this->query($sql);
+        $re = $this->query($sql);
+        return isset($re[0]) ? $re[0] : array();
     }
-	
-	/**
-	 * 释放查询资源
-	 *
-	 * @return void
-	 */
-	abstract public function freeResult();
+
+    /**
+     * 释放查询资源
+     * @return void
+     */
+    public function freeResult()
+    {
+    }
+
+    /**
+     * 获取最后数据库操作影响到的条数
+     * @return int
+     */
+    public function affectedRows() {
+        return $this->numRows ;
+    }
+
 
 
     /**
@@ -478,7 +502,7 @@ abstract class AbstractFreeDb {
         if('' != $this->lastSql){
             $this->error .= "\n [ SQL语句 ] : ".$this->lastSql;
         }
-
+var_dump($this->error);
         // 记录错误日志
         FreeDebug::trace(debug_backtrace());
         if($this->debug) {// 开启数据库调试模式
@@ -791,10 +815,24 @@ abstract class AbstractFreeDb {
         $this->numRows = count( $result );
         return $result;
     }
+    /**
+     * 遍历查询结果集
+     * @param $type		返回结果集类型
+     * 					MYSQL_ASSOC，MYSQL_NUM 和 MYSQL_BOTH
+     * @return array
+     */
+    public function fetchNext() {
+        $result = $this->PDOStatement->fetch(\PDO::FETCH_ASSOC);
+        if(!$result) {
+            $this->freeResult();
+        }
+
+        return $result;
+    }
 
     public function setDbName($dbName)
     {
-        $this->dbName = $dbName;
+        $dbName &&  $this->dbName = $dbName;
     }
 
     public function getDbName()

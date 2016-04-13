@@ -4,27 +4,27 @@ return array (
     'DB_DEPLOY' =>  true,
     'DB_CHARSET' => 'utf8',
     'DB_DEBUG' => true,
-    'DB_DEFAULT_NAME'=> 'mall',
+    'DB_DEFAULT_NAME'=> 'weiphp',
     'DB_SERVER' => array(
         'DB:' => array (
-            'database' => 'mall',
+            'database' => 'weiphp',
             'hostname' => '127.0.0.1',
             'username' => 'root',
-            'password' => '123456',
+            'password' => 'dodoca',
         ),
         'DB_R:' => array (
-            'database' => 'mall',
+            'database' => 'weiphp',
             'hostname' => '127.0.0.1',
             'username' => 'root',
-            'password' => '123456',
+            'password' => 'dodoca',
         ),
-        'DB:Mall' => array (
+        'DB:mall' => array (
             'database' => 'mall',
             'hostname' => '192.168.30.1',
             'username' => 'mall',
             'password' => '123456',
         ),
-        'DB_R:Mall' => array (
+        'DB_R:mall' => array (
             'database' => 'mall',
             'hostname' => '192.168.30.1',
             'username' => 'mall',

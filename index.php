@@ -6,6 +6,6 @@ ob_start();
 	define('FREE_RUNTIME',false);//是否开启运行缓存 默认开启
 	include FREE_PATH . '/free/Free.php';
     $loader = new FreeKernel();
-    $loader->run('Mall');
+    $loader->run('Web');
 
 ?>

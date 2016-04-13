@@ -13,7 +13,6 @@ class FreeModel extends AbstractFreeModel{
 
 	public function __construct($container) {
         $this->_container = $container;
-		$this->dbTablepre =$this->_container->loadConfig('system','tablepre');
 		$this->tableName = $this->dbTablepre .$this->tableName;
 		$this->db =  $this->_container->getComponent('db',array('arguments'=>$this->_container));
 
@@ -204,8 +203,6 @@ class FreeModel extends AbstractFreeModel{
 	 * @return boolean
 	 */
 	public function fieldExists($field) {
-		//$fields = $this->db->get_fields($this->tableName);
-		//return array_key_exists($field, $fields);
         $this->db->setDbName($this->getDbName());
 		return $this->db->fieldExists($this->tableName, $field);
 	}
@@ -227,14 +224,6 @@ class FreeModel extends AbstractFreeModel{
 		}
 		return $data;
 	}
-//
-//	/**
-// * 返回数据库版本号
-// */
-//    final public function version() {
-//        $this->db->setDbName($this->getDbName());
-//        return $this->db->version();
-//    }
 	/**
 	 * 执行更新记录操作
 	 * 对clob字段更新操作

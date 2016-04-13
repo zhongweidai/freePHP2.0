@@ -19,7 +19,9 @@ class IndexController extends FreeController
     {
        echo 'action';
         $model = $this->getModel('user');
-        var_dump($model->select());
+
+        $list = $model->fieldExists('uid');
+        var_dump($list);exit;
         //$model = $this->getModel('users');
         //var_dump($model);
         $this->assign('b',2);

@@ -6,19 +6,14 @@
  * Time: 下午12:36
  */
 namespace Mall\Controller\Index;
-
 use Mall\Controller\BaseController;
-
 
 class IndexController extends BaseController
 {
     public function initAction()
     {
-
         $model_groupbuy = $this->getGroupbuySevice();
-
         $group_list = $model_groupbuy->getGroupbuyCommendedList();
-        $this->assign('group_list', $group_list);
 
         //限时折扣
         $model_xianshi_goods = $this->getXianshiGoodsSevice();
@@ -29,7 +24,9 @@ class IndexController extends BaseController
         $model_web_config = $this->getWebConfigService();
         $web_html = $model_web_config->getWebHtml('index');
         $this->assign('web_html',$web_html);
-
+        $this->assign('group_list', $group_list);
+        var_dump($web_html);
+        exit;
         return $this->template('Index/index_init.html',array('a'=>1));
     }
     

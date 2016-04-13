@@ -10,7 +10,7 @@ namespace Component\Model;
  */
 Abstract class AbstractFreeModel{
     protected $_container;
-	const MUSTvalidate         =   1;// 必须验证
+	const MUST_VAILIDATE         =   1;// 必须验证
 	const EXISTS_VAILIDATE      =   0;// 表单存在字段则验证
 	const VALUE_VAILIDATE       =   2;// 表单值不为空则验证
 	const MODEL_INSERT      =   1;      //  插入模型数据
@@ -196,7 +196,7 @@ Abstract class AbstractFreeModel{
 				$range   = is_array($val[1])?$val[1]:explode(',',$val[1]);
                 return in_array($data[$val[0]] ,$range);
 			case 'between': // 验证是否在某个范围
-                list($min,$max)   =  explode(',',$rule);
+                list($min,$max)   =  explode(',',$val[1]);
                 return $data[$val[0]]>=$min && $data[$val[0]]<=$max;
             case 'equal': // 验证是否等于某个值
                 return $data[$val[0]] == $val[1];

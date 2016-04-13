@@ -27,6 +27,7 @@ final class FreeMysqlDb extends AbstractFreeDb {
 
         $this->options = isset($configs['DB_PARAMS']) ? $configs['DB_PARAMS'] : array();
         $this->dbName = isset($configs['DB_DEFAULT_NAME']) ? $configs['DB_DEFAULT_NAME'] : NULL;
+
 	}
     /**
      * 解析pdo连接的dsn信息
@@ -53,103 +54,6 @@ final class FreeMysqlDb extends AbstractFreeDb {
         return $dsn;
     }
 
-
-
-
-	/**
-	 * 数据库查询执行方法
-	 *
-	 * @param $sql 要执行的sql语句
-	 *
-	 * @return 查询资源句柄
-	 */
-	protected function execute($sql)
-    {
-        $dbName = $this->getDbName();
-        $configs = $this->config;
-        //如果是select查询，则查从库
-        if ($this->deploy && strtolower(substr(ltrim($sql), 0, 6))=='select'){
-            $slave = true;
-            $key = 'DB_R:' . $dbName;
-        }else{
-            $slave = false;
-            $key = 'DB:' . $dbName;
-        }
-
-        if(array_key_exists($key,$configs))
-        {
-            $config = $configs[$key];
-        }else{
-            $key = $slave ? 'DB_R:' : 'DB:';
-            $config = $configs[$key];
-        }
-        $link = $this->connect($config,$key);
-
-
-		$this->queryCount++;
-		return $this->lastQueryId;
-	}
-
-
-	
-	/**
-	 * 遍历查询结果集
-	 * @param $type		返回结果集类型	
-	 * 					MYSQL_ASSOC，MYSQL_NUM 和 MYSQL_BOTH
-	 * @return array
-	 */
-	public function fetchNext($type=MYSQL_ASSOC) {
-		$res = mysql_fetch_array($this->lastQueryId, $type);
-		if(!$res) {
-			$this->freeResult();
-		}
-		
-		return $res;
-	}
-	
-	/**
-	 * 释放查询资源
-	 * @return void
-	 */
-	public function freeResult() {
-		if(is_resource($this->lastQueryId)) {
-			mysql_free_result($this->lastQueryId);
-			$this->lastQueryId = null;
-		}
-	}
-	
-	/**
-	public function query($sql,$key='') {
-		$this->execute($sql);
-		if(!is_resource($this->lastQueryId)) {
-			return $this->lastQueryId;
-		}
-
-		$datalist = array();
-		while(($rs = $this->fetchNext()) != false) {
-			if($key) {
-				$datalist[$rs[$key]] = $rs;
-			} else {
-				$datalist[] = $rs;
-			}
-		}
-		$this->freeResult();
-		return $datalist;
-	}
-	**/
-
-	
-
-
-	
-	/**
-	 * 获取最后数据库操作影响到的条数
-	 * @return int
-	 */
-	public function affectedRows() {
-		return mysql_affected_rows($this->link);
-	}
-	
 	/**
 	 * 获取数据表主键
 	 * @param $table 		数据表
@@ -170,10 +74,11 @@ final class FreeMysqlDb extends AbstractFreeDb {
 	 */
 	public function getFields($table) {
 		$fields = array();
-		$this->execute("SHOW FULL COLUMNS FROM $table");
-		while($r = $this->fetchNext()) {
-			$fields[$r['Field']] = $r;
-		}
+        $r = $this->query("SHOW FULL COLUMNS FROM $table");
+        foreach($r as $val)
+        {
+            $fields[$val['Field']] = $val;
+        }
 		return $fields;
 	}
 
@@ -207,7 +112,7 @@ final class FreeMysqlDb extends AbstractFreeDb {
 		$tables = array();
 		$this->execute("SHOW TABLES");
 		while($r = $this->fetchNext()) {
-			$tables[] = $r['Tables_in_'.$this->config['database']];
+			$tables[] = $r['Tables_in_'.$this->getDbName()];
 		}
 		return $tables;
 	}
@@ -264,14 +169,9 @@ final class FreeMysqlDb extends AbstractFreeDb {
 	 * @param $quotation 
 	 */
 	public function escapeString(&$value, $key='', $quotation = 1) {
-
-        $value = mysql_real_escape_string($value);
-		if ($quotation) {
-			$q = '\'';
-		} else {
-			$q = '';
+       if ($quotation) {
+            $value = $this->getCurrentLink()->quote($value);
 		}
-		$value = $q.$value.$q;
 		return $value;
 	}
 	public function parseOrder($order) {
