@@ -14,11 +14,12 @@ class FreeKernel
     private static $_loader = NULL;
     private static $_container = NULL;
 
-    public static function run($appName = 'Web')
+    public static function run()
     {
-        self::_init_($appName);
-       // set_error_handler('myErrorHandler',E_ALL );
-       // register_shutdown_function('shutdown');
+        self::_init_();
+        $container = self::container();
+        $param = $container->getComponent('route',array('arguments'=> $container));
+        $appName = $param->getApp();
         self::container()->setAppName($appName);
         $app = new Free\Libs\FreeApplication(self::container());
         self::container()->setApp($app);
@@ -32,10 +33,8 @@ class FreeKernel
         }
     }
 
-    public static function _init_($appName='Web')
+    public static function _init_()
     {
-        //define('APP',$appName);
-
         //自动注册类
         self::loader()->autoLoad();
         if(FREE_RUNTIME)
@@ -335,4 +334,9 @@ function shutdown()
     $e = error_get_last();
     print_r($e);
     echo 'Script executed with success', PHP_EOL;
+}
+
+function C($file, $key = '', $default = '', $reload = false)
+{
+       return \FreeKernel::container()->loadConfig($file,$key,$default,$reload);
 }

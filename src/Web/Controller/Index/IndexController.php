@@ -17,13 +17,10 @@ class IndexController extends FreeController
 {
     public function initAction()
     {
-       echo 'action';
         $model = $this->getModel('user');
 
         $list = $model->fieldExists('uid');
-        var_dump($list);exit;
-        //$model = $this->getModel('users');
-        //var_dump($model);
+
         $this->assign('b',2);
         $this->getComponent('cache',array('arguments'=>$this->_container))->set('test',array('a'=>1),'index');
        // var_dump($this->getCache()->get('test','index'));

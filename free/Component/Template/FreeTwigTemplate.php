@@ -16,7 +16,7 @@ class FreeTwigTemplate
     protected $_twig;
 
     private $data = array();
-    public function __construct($container)
+    public function __construct($container,$config=array())
     {
         $this->_container = $container;
         $config = $this->_container->loadConfig('application',$this->_container->getAppName());
@@ -24,7 +24,7 @@ class FreeTwigTemplate
         {
             $path = FREE_PATH . $config['template-path'];
         }else{
-            $path = FREE_PATH . 'src' . DIRECTORY_SEPARATOR . $this->_container->getAppName() . 'Templates' . DIRECTORY_SEPARATOR;
+            $path = FREE_PATH . 'src' . DIRECTORY_SEPARATOR . $this->_container->getAppName() . DIRECTORY_SEPARATOR .'templates' . DIRECTORY_SEPARATOR;
         }
         \Twig_Autoloader::register();
 
@@ -34,9 +34,11 @@ class FreeTwigTemplate
             'debug' => !defined('FREE_RUNTIME') || !FREE_RUNTIME,
         ));
         $this->setSysFunction();
-        if(isset($config['Twig_extends']))
+        $twig_extends = $this->_container->loadConfig('system','twig_extends');
+
+        if($twig_extends)
         {
-            $this->setExtends($config['Twig_extends']);
+            $this->setExtends($twig_extends);
         }
         $this->setGlobals();
     }

@@ -13,6 +13,7 @@ use Free\Libs\FreeException;
 
 final class FreeApplication{
     private $_container;
+    private $routeApp;
 	private $rounteM;
 	private $rounteC;
 	private $rounteA;
@@ -26,9 +27,10 @@ final class FreeApplication{
 	{
         $this->_container = $container;
 		$param = $container->getComponent('route',array('arguments'=> $container));
-		$this->rounteM = $param->route_m();
-		$this->rounteC = $param->route_c();
-		$this->rounteA = $param->route_a();
+        $this->routeApp = $param->getApp();
+		$this->rounteM = $param->getM();
+		$this->rounteC = $param->getC();
+		$this->rounteA = $param->getA();
 		//$this->init($this->_module,$this->_controller,$this->_action);
 	}
 	public function __destruct()
@@ -93,7 +95,7 @@ final class FreeApplication{
 	private function loadController() 
 	{
 		$filename = ucfirst($this->rounteC);
-		$classname = $this->_container->getAppName(). "\\"  . 'Controller'. "\\" .ucfirst($this->rounteM) . "\\" . $filename . 'Controller';
+		$classname = ucfirst($this->routeApp). "\\"  . 'Controller'. "\\" .ucfirst($this->rounteM) . "\\" . $filename . 'Controller';
         if(class_exists($classname))
         {
             $controller = new $classname($this->_container);

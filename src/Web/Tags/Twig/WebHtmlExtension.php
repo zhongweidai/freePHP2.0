@@ -7,7 +7,7 @@
  */
 
 namespace Web\Tags\Twig;
-
+use Mall\Service\ServiceUtil;
 
 class WebHtmlExtension extends \Twig_Extension {
     protected $_container;
@@ -30,12 +30,17 @@ class WebHtmlExtension extends \Twig_Extension {
         );
     }
 
-    public function getPath($action,$args=array(),$anchor='',$script='')
+    /**
+     * url拼接
+     * @param string $action
+     * @param unknown $args
+     * @param string $anchor
+     * @param string $script
+     * @return string
+     */
+    public function getPath ($action='', $args = array(), $anchor = '', $script = '')
     {
-        $router = $this->_container->getComponent('route');
-        $url = $router->assemble($action, $args,$script);
-        $url .= $anchor ? '#' . $anchor : '';
-        return $url;
+        return ServiceUtil::path($action,$args,$anchor,$script);
     }
 
     /**

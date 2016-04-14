@@ -22,8 +22,8 @@ class WebDataExtension extends \Twig_Extension {
     {
         $options = array('is_safe' => array('html'));
         return array(
-            new \Twig_SimpleFunction('data', array($this, 'getData'), $options),
-            new \Twig_SimpleFunction('datas', array($this, 'getDatas'), $options),
+            new \Twig_SimpleFunction('mall_data', array($this, 'getData'), $options),
+            new \Twig_SimpleFunction('mall_datas', array($this, 'getDatas'), $options),
             //new \Twig_SimpleFunction('datas_count', array($this, 'getDatasCount'), $options),
             //new \Twig_SimpleFunction('service', array($this, 'callService'), $options),
         );
@@ -64,6 +64,6 @@ class WebDataExtension extends \Twig_Extension {
      */
     public function getName()
     {
-        return 'Web_data_twig';
+        return 'Mall_Web_data_twig';
     }
 } 

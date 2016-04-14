@@ -126,7 +126,7 @@ Abstract class AbstractFreeModel{
 					continue;
 				}
 				switch($val[3]) {
-					case self::MUSTvalidate:   // 必须验证 不管表单是否有设置该字段
+                    case self::MUST_VAILIDATE:   // 必须验证 不管表单是否有设置该字段
 						if(false === $this->_validationField($data,$val,$type))
 						{
 							$this->error    =   $val[2];

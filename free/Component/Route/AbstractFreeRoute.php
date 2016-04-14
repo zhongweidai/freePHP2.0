@@ -8,20 +8,21 @@ namespace Component\Route;
  * @package base
  */
 abstract class AbstractFreeRoute{
+    abstract public function getApp();
 	/**
 	 * 获取模型
 	 */
-	abstract public function route_m();
+	abstract public function getM();
 
 	/**
 	 * 获取控制器
 	 */
-	abstract public function route_c();
+	abstract public function getC();
 
 	/**
 	 * 获取事件
 	 */
-	abstract public function route_a();
+	abstract public function getA();
 	/**
 	 * url拼凑
 	 */

@@ -10,62 +10,71 @@ namespace Component\Route;
 class FreeDefaultRoute extends AbstractFreeRoute{
 
 	//路由配置
-	private $route_config = '';
-
+	private $route_config = array('app'=>'Web','m'=>'index','c'=>'index','a'=>'init');
     private $_container;
+
 	
 	public function __construct($container) {
         $this->_container = $container;
-		$config = $this->_container->loadConfig('application', $this->_container->getAppName());
-		if(isset($config['route']))
-		{
-			$route_config = explode('/',$config['route']); 
-		}
-		$this->route_config['m'] = isset($route_config[0]) ?  $route_config[0] : 'default';
-		$this->route_config['c'] = isset($route_config[1]) ?  $route_config[1] : 'index';
-		$this->route_config['a'] = isset($route_config[2]) ?  $route_config[2] : 'init';
-		/**$page = $this->getRequest()->getGet('page');
-		if(isset($page))
-		{
-			$_GET['page'] = max(intval($page),1);
-		}**/
-		return true;
+        if(isset($_GET['__s']))
+        {
+            $this->route_config = $this->query($_GET['__s']) ;
+        }
+
 	}
+
+    public function query($str)
+    {
+        $routes = $this->route_config;
+        if(empty($str))
+        {
+            return $routes;
+        }
+        if(strpos($str,'/') === false)
+        {
+            $query = array($str);
+        }else{
+            $query = explode('/',$str);
+        }
+        $apps = C('application');
+
+        if(array_key_exists(ucfirst($query[0]),$apps))
+        {
+            $routes['app'] = ucfirst($query[0]);
+            !empty($query[1]) && $routes['m'] = $query[1];
+            !empty($query[2]) && $routes['c'] = $query[2];
+            !empty($query[3]) && $routes['a'] = $query[3];
+        }else{
+            !empty($query[0]) && $routes['m'] = $query[0];
+            !empty($query[1]) && $routes['c'] = $query[1];
+            !empty($query[2]) && $routes['a'] = $query[2];
+        }
+        return $routes;
+    }
+    public function getApp()
+    {
+        return $this->route_config['app'];
+    }
 
 	/**
 	 * 获取模型
 	 */
-	public function route_m() {
-		$m = isset($_GET['m']) && !empty($_GET['m']) ? $_GET['m'] : (isset($_POST['m']) && !empty($_POST['m']) ? $_POST['m'] : '');
-		if (empty($m)) {
-			return $this->route_config['m'];
-		} else {
-			return $m;
-		}
+	public function getM() {
+        return $this->route_config['m'];
 	}
 
 	/**
 	 * 获取控制器
 	 */
-	public function route_c() {
-		$c = isset($_GET['c']) && !empty($_GET['c']) ? $_GET['c'] : (isset($_POST['c']) && !empty($_POST['c']) ? $_POST['c'] : '');
-		if (empty($c)) {
-			return $this->route_config['c'];
-		} else {
-			return $c;
-		}
+	public function getC() {
+        return $this->route_config['c'];
 	}
 
 	/**
 	 * 获取事件
 	 */
-	public function route_a() {
-		$a = isset($_GET['a']) && !empty($_GET['a']) ? $_GET['a'] : (isset($_POST['a']) && !empty($_POST['a']) ? $_POST['a'] : '');
-		if (empty($a)) {
-			return $this->route_config['a'];
-		} else {
-			return $a;
-		}
+	public function getA() {
+        return $this->route_config['a'];
 	}
 	
 	/* (non-PHPdoc)

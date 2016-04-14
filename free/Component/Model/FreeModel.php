@@ -212,19 +212,6 @@ class FreeModel extends AbstractFreeModel{
 		return $this->db->listTables();
 	}
 	/**
-	 * 返回数据结果集
-	 * @param $query （mysql_query返回值）
-	 * @return array
-	 */
-	final public function fetchArray() {
-		$data = array();
-        $this->db->setDbName($this->getDbName());
-		while($r = $this->db->fetchNext()) {
-			$data[] = $r;		
-		}
-		return $data;
-	}
-	/**
 	 * 执行更新记录操作
 	 * 对clob字段更新操作
 	 *

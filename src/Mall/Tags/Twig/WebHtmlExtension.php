@@ -29,10 +29,10 @@ class WebHtmlExtension extends \Twig_Extension
     public function getFunctions ()
     {
         return array(
-                'path' => new \Twig_Function_Method($this, 'getPath'),
+              //  'path' => new \Twig_Function_Method($this, 'getPath'),
         		'replaceParam' => NEW \Twig_Function_Method($this, 'getReplaceParam'),
         		'dropParam' => new \Twig_Function_Method($this, 'getDropParam'),
-                'file_path' => new \Twig_Function_Method($this, 'getFilePath'),
+                //'file_path' => new \Twig_Function_Method($this, 'getFilePath'),
                 'setting' => new \Twig_Function_Method($this, 'getSetting'),
                 'csrf_token' => new \Twig_Function_Method($this, 'getCsrfToken'),
                 'assets' => new \Twig_Function_Method($this, 'getAssets'),
@@ -43,18 +43,7 @@ class WebHtmlExtension extends \Twig_Extension
                 'defaultGoodsImage' => new \Twig_Function_Method($this, 'getDefaultGoodsImage'),
         );
     }
-     /**
-      * url拼接
-      * @param string $action
-      * @param unknown $args
-      * @param string $anchor
-      * @param string $script
-      * @return string
-      */
-    public function getPath ($action='', $args = array(), $anchor = '', $script = '')
-    {
-        return ServiceUtil::path($action,$args,$anchor,$script);
-    }
+
     
     /**
      * 删除地址参数
@@ -182,6 +171,6 @@ class WebHtmlExtension extends \Twig_Extension
      */
     public function getName ()
     {
-        return 'Web_html_twig';
+        return 'Mall_Web_html_twig';
     }
 } 
